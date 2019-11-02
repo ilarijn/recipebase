@@ -6,4 +6,4 @@ Users must register and can choose to publish recipes they have saved.
 
 
 ###### Preliminary database schema 
-![db diagram](project/kaavio.png)
+![db diagram](documentation/kaavio.png)

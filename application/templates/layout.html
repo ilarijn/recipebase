@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>recipebase</title>
+</head>
+
+<body>
+    <ul>
+        <li><a href="{{ url_for('ingredients_index') }}">List ingredients</a></li>
+        <li><a href="{{ url_for('ingredients_form') }}">Add an ingredient</a></li>
+    </ul>
+
+    {% block body %}
+    <p>
+        Content.
+    </p>
+    {% endblock %}
+</body>
+
+</html>
