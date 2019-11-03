@@ -1,10 +1,19 @@
 {% extends "layout.html" %}
-  
+
 {% block body %}
-<form method="POST" action="{{ url_for('ingredients_create') }}">
-  <input type="text" name="name"/>
-  <input type="text" name="type"/>
-  <input type="text" name="unit"/>
-  <input type="submit" value="Add a new ingredient"/>
-</form>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Unit</th>
+  </tr>
+  <tr>
+    <form method="POST" action="{{ url_for('ingredients_create') }}">
+      <td> <input type="text" name="name" /></td>
+      <td> <input type="text" name="category" /></td>
+      <td> <input type="text" name="unit" /></td>
+      <td> <input type="submit" value="Add a new ingredient" /></td>
+  </tr>
+  </form>
+</table>
 {% endblock %}

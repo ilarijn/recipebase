@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<table>
+    {% for key, value in ingredients_temp.items() %}
+    <tr>
+        <td>
+            {{ key.name }}
+        </td>
+        <td>
+            {{ value }}
+        </td>
+        <td>
+            {{ key.unit }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<form method="POST" action="{{ url_for('clear_selection') }}">
+    <input type="submit" value="Clear selections" />
+</form>
+<br>
+
+<table>
+    <tr>
+        <th>Ingredient</th>
+        <th>Unit</th>
+        <th>Amount</th>
+    </tr>
+    {% for ingredient in ingredients %}
+    <tr>
+        <td>{{ ingredient.name }}</td>
+        <td>{{ ingredient.unit }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('add_to_recipe') }}">
+                <input type="text" name="amount" />
+                <input type="hidden" value="{{ingredient.id}}" name="id" />
+        </td>
+        <td>
+            <input type="submit" value="Add ingredient to recipe" />
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

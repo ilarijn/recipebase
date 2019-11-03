@@ -7,10 +7,13 @@
 </head>
 
 <body>
-    <ul>
-        <li><a href="{{ url_for('ingredients_index') }}">List ingredients</a></li>
-        <li><a href="{{ url_for('ingredients_form') }}">Add an ingredient</a></li>
-    </ul>
+    <table cellpadding="10">
+        <tr>
+            <td><a href="{{ url_for('recipe_form') }}">Add a recipe</a></td>
+            <td><a href="{{ url_for('ingredients_form') }}">Add an ingredient</a></td>
+            <td><a href="{{ url_for('ingredients_index') }}">List ingredients</a></td>
+        </tr>
+    </table>
 
     {% block body %}
     <p>

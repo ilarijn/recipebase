@@ -16,7 +16,7 @@ def ingredients_form():
 @app.route("/ingredients/", methods=["POST"])
 def ingredients_create():
     i = Ingredient(request.form.get("name"), request.form.get(
-        "type"), request.form.get("unit"))
+        "category"), request.form.get("unit"))
     db.session().add(i)
     db.session().commit()
     return redirect(url_for("ingredients_index"))
