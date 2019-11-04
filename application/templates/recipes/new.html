@@ -2,8 +2,15 @@
 
 {% block body %}
 
-
 <table>
+    <form method="POST" id="create" action="{{ url_for('create_recipe') }}">
+        <tr>
+            <td>Recipe name <input type="text" name="name" /></td>
+        </tr>
+        <tr>
+            <td>Instructions <textarea name="instructions"></textarea></td>
+        </tr>
+    </form>
     {% for key, value in ingredients_temp.items() %}
     <tr>
         <td>
@@ -15,14 +22,16 @@
         <td>
             {{ key.unit }}
         </td>
+        <td>
+            <form method="POST" action="{{ url_for('clear_selection') }}">
+                <input type="hidden" value="{{ key.id }}" name="key_id" />
+                <input type="submit" value="x" />
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
 
-<br>
-<form method="POST" action="{{ url_for('clear_selection') }}">
-    <input type="submit" value="Clear selections" />
-</form>
 <br>
 
 <table>
@@ -47,5 +56,6 @@
     </tr>
     {% endfor %}
 </table>
-
+<br>
+<input type="submit" form="create" value="Create recipe" />
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>{{ recipe.name }}</h2>
+<p>{{ recipe.date_created }}</p>
+<table>
+  {% for ingredient, amount in ingredients.items() %}
+  <tr>
+    <td>{{ ingredient.name }}</td>
+    <td>{{ amount }}</td>
+    <td>{{ ingredient.unit }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<p>
+  {{ recipe.instructions }}
+</p>
+{% endblock %}
