@@ -80,7 +80,7 @@ def save_changes(recipe_id):
     r.name = request.form.get("name")
     r.instructions = request.form.get("instructions")
     db.session.commit()
-    return redirect(url_for("edit_recipe", recipe_id=recipe_id))
+    return redirect(url_for("view_recipe", recipe_id=recipe_id))
 
 
 @app.route("/recipes/", methods=["GET"])

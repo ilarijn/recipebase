@@ -1,3 +1,5 @@
+https://recipebase.herokuapp.com
+
 #### recipebase
 The aim is to create a database of ingredients and recipes. Users may create and store recipes using ingredients in the database and add missing ingredients to the database. Users may make recipes public to be viewed by anyone or keep them private. Recipes may be searched for using different parameters: by recipe name, recipe time, ingredient name, ingredient category or different combinations.
 Tags for both ingredients and recipes will maybe be added later for more search options.
