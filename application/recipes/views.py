@@ -7,7 +7,7 @@ ingredients_temp = {}
 id_temp = {}
 
 
-@app.route("/recipes/create", methods=["POST"])
+@app.route("/recipes/create/", methods=["POST"])
 def create_recipe():
     r = Recipe(name=request.form.get("name"))
     r.instructions = request.form.get("instructions")
@@ -22,7 +22,7 @@ def create_recipe():
     return redirect(url_for("recipe_form"))
 
 
-@app.route("/recipes/new", methods=["GET"])
+@app.route("/recipes/new/", methods=["GET"])
 def recipe_form():
     return render_template("recipes/new.html", ingredients=Ingredient.query.all(), ingredients_temp=ingredients_temp)
 
@@ -47,17 +47,50 @@ def clear_selection():
     return redirect(url_for("recipe_form"))
 
 
-@app.route("/recipes/<recipe_id>", methods=["GET"])
+@app.route("/recipes/<recipe_id>/", methods=["GET"])
 def view_recipe(recipe_id):
     r = Recipe.query.get(recipe_id)
     r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
-    ingredients = {}
-    for item in r_i:
-        i = Ingredient.query.get(item.ingredient_id)
-        ingredients[i] = item.amount
+    ingredients = link_amounts(r_i)
     return render_template("recipes/view.html", recipe=r, ingredients=ingredients)
+
+
+@app.route("/recipes/<recipe_id>/delete", methods=["POST"])
+def delete_recipe(recipe_id):
+    r = Recipe.query.get(recipe_id)
+    r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
+    for item in r_i:
+        db.session.delete(item)
+    db.session.delete(r)
+    db.session.commit()
+    return redirect(url_for("recipes_index"))
+
+
+@app.route("/recipes/<recipe_id>/edit", methods=["GET"])
+def edit_recipe(recipe_id):
+    r = Recipe.query.get(recipe_id)
+    r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
+    ingredients = link_amounts(r_i)
+    return render_template("recipes/edit.html", recipe=r, ingredients=ingredients)
+
+
+@app.route("/recipes/<recipe_id>/save", methods=["POST"])
+def save_changes(recipe_id):
+    r = Recipe.query.get(recipe_id)
+    r.name = request.form.get("name")
+    r.instructions = request.form.get("instructions")
+    db.session.commit()
+    return redirect(url_for("edit_recipe", recipe_id=recipe_id))
 
 
 @app.route("/recipes/", methods=["GET"])
 def recipes_index():
     return render_template("recipes/list.html", recipes=Recipe.query.all())
+
+
+def link_amounts(r_i):
+    ingredients = {}
+    for item in r_i:
+        i = Ingredient.query.get(item.ingredient_id)
+        ingredients[i] = item.amount
+    return ingredients

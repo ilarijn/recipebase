@@ -1,0 +1,13 @@
+As a user, I want to be able to easily create and store recipes using a database of ingredients.
+
+As a user, I want to be able to add a missing ingredient to the database.
+ *As a database administrator, I want to be able to ensure there is not too much redundant data.
+
+As a user, I want to be able to modify my existing recipes.
+
+As a user, I want to be able to make a recipe public and browse recipes published by others.
+
+As a user creating a recipe, I would prefer to able to affect changes to the recipe form without losing data entered in other fields.
+
+
+

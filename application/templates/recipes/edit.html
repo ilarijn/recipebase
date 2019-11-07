@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form method="POST" id="edit" action="{{ url_for('save_changes', recipe_id=recipe.id) }}">
+<table>
+        <tr>
+            <td>Recipe name <input type="text" name="name" value="{{ recipe.name }}" /></td>
+        </tr>
+        <tr>
+            <td>Instructions <textarea name="instructions">{{ recipe.instructions }}</textarea></td>
+        </tr>
+    </form>
+    {% for key, value in ingredients.items() %}
+    <tr>
+        <td>
+            {{ key.name }}
+        </td>
+        <td>
+            {{ value }}
+        </td>
+        <td>
+            {{ key.unit }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<input type="submit" value="Save changes" form="edit" />
+{% endblock %}
