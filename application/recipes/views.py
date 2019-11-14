@@ -24,7 +24,8 @@ def create_recipe():
 
 @app.route("/recipes/new/", methods=["GET"])
 def recipe_form():
-    return render_template("recipes/new.html", ingredients=Ingredient.query.all(), ingredients_temp=ingredients_temp)
+    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
+                           ingredients_temp=ingredients_temp)
 
 
 @app.route("/recipes/new", methods=["POST"])
@@ -32,7 +33,12 @@ def add_to_recipe():
     i = Ingredient.query.get(request.form.get("id"))
     ingredients_temp[i] = request.form.get("amount")
     id_temp[i.id] = request.form.get("amount")
-    return redirect(url_for("recipe_form"))
+    name_temp = request.form.get("hidden_name")
+    instructions_temp = request.form.get("hidden_instructions")
+    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
+                           ingredients_temp=ingredients_temp,
+                           name_temp=name_temp,
+                           instructions_temp=instructions_temp)
 
 
 @app.route("/recipes/clear", methods=["POST"])
@@ -44,7 +50,12 @@ def clear_selection():
             delete = key
             del id_temp[key.id]
     del ingredients_temp[delete]
-    return redirect(url_for("recipe_form"))
+    name_temp = request.form.get("hidden_name")
+    instructions_temp = request.form.get("hidden_instructions")
+    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
+                           ingredients_temp=ingredients_temp,
+                           name_temp=name_temp,
+                           instructions_temp=instructions_temp)
 
 
 @app.route("/recipes/<recipe_id>/", methods=["GET"])

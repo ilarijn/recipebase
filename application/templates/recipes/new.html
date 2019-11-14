@@ -5,10 +5,10 @@
 <table>
     <form method="POST" id="create" action="{{ url_for('create_recipe') }}">
         <tr>
-            <td>Recipe name <input type="text" name="name" /></td>
+            <td>Recipe name <input type="text" name="name" id="namefield" value="{{ name_temp }}" /></td>
         </tr>
         <tr>
-            <td>Instructions <textarea name="instructions"></textarea></td>
+            <td>Instructions <textarea name="instructions" id="instrfield">{{ instructions_temp }}</textarea></td>
         </tr>
     </form>
     {% for key, value in ingredients_temp.items() %}
@@ -25,7 +25,9 @@
         <td>
             <form method="POST" action="{{ url_for('clear_selection') }}">
                 <input type="hidden" value="{{ key.id }}" name="key_id" />
-                <input type="submit" value="x" />
+                <input type="hidden" name="hidden_name" />
+                <input type="hidden" name="hidden_instructions" />
+                <input type="submit" name="remove_button" value="Remove" />
             </form>
         </td>
     </tr>
@@ -48,9 +50,11 @@
             <form method="POST" action="{{ url_for('add_to_recipe') }}">
                 <input type="text" name="amount" />
                 <input type="hidden" value="{{ingredient.id}}" name="id" />
+                <input type="hidden" name="hidden_name" />
+                <input type="hidden" name="hidden_instructions" />
         </td>
         <td>
-            <input type="submit" value="Add ingredient to recipe" />
+            <input type="submit" name="add_button" value="Add ingredient to recipe" />
             </form>
         </td>
     </tr>
@@ -58,4 +62,20 @@
 </table>
 <br>
 <input type="submit" form="create" value="Create recipe" />
+
+<script type="text/javascript" t>
+    $('input[name="add_button"]').click(function () {
+        $('input[name="hidden_name"]').val($('#namefield').val());
+        $('input[name="hidden_instructions"]').val($('#instrfield').val());
+    }
+    );
+</script>
+<script type="text/javascript" t>
+    $('input[name="remove_button"]').click(function () {
+        $('input[name="hidden_name"]').val($('#namefield').val());
+        $('input[name="hidden_instructions"]').val($('#instrfield').val());
+    }
+    );
+</script>
+
 {% endblock %}
