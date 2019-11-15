@@ -1,9 +1,9 @@
 from application import app, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, json
 from application.ingredients.models import Ingredient
 from application.recipes.models import Recipe, RecipeIngredient
 
-ingredients_temp = {}
+#ingredients_temp = {}
 id_temp = {}
 
 
@@ -17,7 +17,7 @@ def create_recipe():
         ri = RecipeIngredient(recipe_id=r.id, ingredient_id=key, amount=value)
         db.session().add(ri)
     db.session().commit()
-    ingredients_temp.clear()
+    # ingredients_temp.clear()
     id_temp.clear()
     return redirect(url_for("recipe_form"))
 
@@ -25,37 +25,35 @@ def create_recipe():
 @app.route("/recipes/new/", methods=["GET"])
 def recipe_form():
     return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp=ingredients_temp)
+                           ingredients_temp={})
 
 
-@app.route("/recipes/new", methods=["POST"])
+@app.route("/recipes/new/", methods=["POST"])
 def add_to_recipe():
-    i = Ingredient.query.get(request.form.get("id"))
-    ingredients_temp[i] = request.form.get("amount")
-    id_temp[i.id] = request.form.get("amount")
-    name_temp = request.form.get("hidden_name")
-    instructions_temp = request.form.get("hidden_instructions")
+    data = request.get_json()
+    name = data['name']
+    instructions = data['instructions']
+    ingredients = data['ingredients']
+    for item in ingredients:
+        print(item)  
     return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp=ingredients_temp,
-                           name_temp=name_temp,
-                           instructions_temp=instructions_temp)
+                           ingredients_temp=ingredients, name_temp="haha", instructions_temp=instructions)
 
 
 @app.route("/recipes/clear", methods=["POST"])
 def clear_selection():
-    key_id = int(request.form.get("key_id"))
-    delete = None
-    for key, value in ingredients_temp.items():
-        if key.id == key_id:
-            delete = key
-            del id_temp[key.id]
-    del ingredients_temp[delete]
-    name_temp = request.form.get("hidden_name")
-    instructions_temp = request.form.get("hidden_instructions")
+    data = request.get_json()
+    name = data['name']
+    instructions = data['instructions']
+    ingredients = data['ingredients']
+    for key, value in data.items():
+        print(key)
+        print(value)
+    for i in data['ingredients']:
+        for key, value in i.items():
+            print(key + ": " + value)
     return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp=ingredients_temp,
-                           name_temp=name_temp,
-                           instructions_temp=instructions_temp)
+                           ingredients_temp=ingredients, name_temp=name, instructions_temp=instructions)
 
 
 @app.route("/recipes/<recipe_id>/", methods=["GET"])
@@ -97,6 +95,22 @@ def save_changes(recipe_id):
 @app.route("/recipes/", methods=["GET"])
 def recipes_index():
     return render_template("recipes/list.html", recipes=Recipe.query.all())
+
+
+@app.route("/recipes/json", methods=["POST"])
+def get_json():
+    stuff = request.get_json()
+    name = stuff['name']
+    instructions = stuff['instructions']
+    for key, value in stuff.items():
+        print(key)
+        print(value)
+    for i in stuff['ingredients']:
+        for key, value in i.items():
+            print("*************")
+            print(key + ": " + value)
+            print("*************")
+    return "OK"
 
 
 def link_amounts(r_i):

@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<table>
+<table id="new_recipe">
     <form method="POST" id="create" action="{{ url_for('create_recipe') }}">
         <tr>
             <td>Recipe name <input type="text" name="name" id="namefield" value="{{ name_temp }}" /></td>
@@ -11,24 +11,20 @@
             <td>Instructions <textarea name="instructions" id="instrfield">{{ instructions_temp }}</textarea></td>
         </tr>
     </form>
-    {% for key, value in ingredients_temp.items() %}
-    <tr>
-        <td>
-            {{ key.name }}
+    
+    {% for object in ingredients_temp %}
+    <tr class="ingredient" id="{{ object['id'] }}">
+        <td class="name">
+            {{ object['name'] }}
+        </td>
+        <td class="amount">
+            {{ object['amount'] }}
+        </td>
+        <td class="unit">
+            {{ object['unit'] }}
         </td>
         <td>
-            {{ value }}
-        </td>
-        <td>
-            {{ key.unit }}
-        </td>
-        <td>
-            <form method="POST" action="{{ url_for('clear_selection') }}">
-                <input type="hidden" value="{{ key.id }}" name="key_id" />
-                <input type="hidden" name="hidden_name" />
-                <input type="hidden" name="hidden_instructions" />
-                <input type="submit" name="remove_button" value="Remove" />
-            </form>
+            <button name="remove_button" type="button">Remove</button>
         </td>
     </tr>
     {% endfor %}
@@ -36,26 +32,19 @@
 
 <br>
 
-<table>
+<table id="ingredient_list">
     <tr>
         <th>Ingredient</th>
         <th>Unit</th>
         <th>Amount</th>
     </tr>
     {% for ingredient in ingredients %}
-    <tr>
-        <td>{{ ingredient.name }}</td>
-        <td>{{ ingredient.unit }}</td>
+    <tr class="ingredient" id="{{ ingredient.id }}">
+        <td class="name">{{ ingredient.name }}</td>
+        <td class="unit">{{ ingredient.unit }}</td>
+        <td class="amount"><input type="text" /></td>
         <td>
-            <form method="POST" action="{{ url_for('add_to_recipe') }}">
-                <input type="text" name="amount" />
-                <input type="hidden" value="{{ingredient.id}}" name="id" />
-                <input type="hidden" name="hidden_name" />
-                <input type="hidden" name="hidden_instructions" />
-        </td>
-        <td>
-            <input type="submit" name="add_button" value="Add ingredient to recipe" />
-            </form>
+            <button name="add_button" type="button">Add</button>
         </td>
     </tr>
     {% endfor %}
@@ -63,19 +52,8 @@
 <br>
 <input type="submit" form="create" value="Create recipe" />
 
-<script type="text/javascript" t>
-    $('input[name="add_button"]').click(function () {
-        $('input[name="hidden_name"]').val($('#namefield').val());
-        $('input[name="hidden_instructions"]').val($('#instrfield').val());
-    }
-    );
-</script>
-<script type="text/javascript" t>
-    $('input[name="remove_button"]').click(function () {
-        $('input[name="hidden_name"]').val($('#namefield').val());
-        $('input[name="hidden_instructions"]').val($('#instrfield').val());
-    }
-    );
-</script>
+<button id="test_button" type="button">Send JSON</button>
+
+<script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
 
 {% endblock %}
