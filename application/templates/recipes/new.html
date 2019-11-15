@@ -2,57 +2,43 @@
 
 {% block body %}
 
-<table id="new_recipe">
-    <form method="POST" id="create" action="{{ url_for('create_recipe') }}">
+<div id="main">
+    <table id="new_recipe">
         <tr>
-            <td>Recipe name <input type="text" name="name" id="namefield" value="{{ name_temp }}" /></td>
+            <td>Recipe name <input type="text" id="namefield" /></td>
         </tr>
         <tr>
-            <td>Instructions <textarea name="instructions" id="instrfield">{{ instructions_temp }}</textarea></td>
+            <td>Instructions <textarea id="instrfield"></textarea></td>
         </tr>
-    </form>
-    
-    {% for object in ingredients_temp %}
-    <tr class="ingredient" id="{{ object['id'] }}">
-        <td class="name">
-            {{ object['name'] }}
-        </td>
-        <td class="amount">
-            {{ object['amount'] }}
-        </td>
-        <td class="unit">
-            {{ object['unit'] }}
-        </td>
-        <td>
-            <button name="remove_button" type="button">Remove</button>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    </table>
 
-<br>
+    <table id="added_ingredients">
+        <tbody>
+        </tbody>
+    </table>
 
-<table id="ingredient_list">
-    <tr>
-        <th>Ingredient</th>
-        <th>Unit</th>
-        <th>Amount</th>
-    </tr>
-    {% for ingredient in ingredients %}
-    <tr class="ingredient" id="{{ ingredient.id }}">
-        <td class="name">{{ ingredient.name }}</td>
-        <td class="unit">{{ ingredient.unit }}</td>
-        <td class="amount"><input type="text" /></td>
-        <td>
-            <button name="add_button" type="button">Add</button>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<br>
-<input type="submit" form="create" value="Create recipe" />
+    <br>
 
-<button id="test_button" type="button">Send JSON</button>
+    <table id="ingredient_list">
+        <tr>
+            <th>Ingredient</th>
+            <th>Unit</th>
+            <th>Amount</th>
+        </tr>
+        {% for ingredient in ingredients %}
+        <tr class="ingredient" id="{{ ingredient.id }}">
+            <td class="name">{{ ingredient.name }}</td>
+            <td class="unit">{{ ingredient.unit }}</td>
+            <td class="amount"><input type="text" /></td>
+            <td>
+                <button name="add_button" type="button">Add</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <button name="create_button" type="button">Create recipe</button>
+</div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
 

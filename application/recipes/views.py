@@ -9,17 +9,25 @@ id_temp = {}
 
 @app.route("/recipes/create/", methods=["POST"])
 def create_recipe():
-    r = Recipe(name=request.form.get("name"))
-    r.instructions = request.form.get("instructions")
+    data = request.get_json()
+    name = data['name']
+    instructions = data['instructions']
+    ingredients = data['ingredients']
+
+    r = Recipe(name)
+    r.instructions = instructions
+
     db.session().add(r)
     db.session().flush()
-    for key, value in id_temp.items():
-        ri = RecipeIngredient(recipe_id=r.id, ingredient_id=key, amount=value)
+
+    for i in ingredients:
+        ri = RecipeIngredient(
+            recipe_id=r.id, ingredient_id=i['id'], amount=i['amount'])
         db.session().add(ri)
+
     db.session().commit()
-    # ingredients_temp.clear()
-    id_temp.clear()
-    return redirect(url_for("recipe_form"))
+
+    return "OK"
 
 
 @app.route("/recipes/new/", methods=["GET"])
@@ -35,7 +43,7 @@ def add_to_recipe():
     instructions = data['instructions']
     ingredients = data['ingredients']
     for item in ingredients:
-        print(item)  
+        print(item)
     return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
                            ingredients_temp=ingredients, name_temp="haha", instructions_temp=instructions)
 
