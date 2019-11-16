@@ -3,8 +3,16 @@ from flask import render_template, request, redirect, url_for, json
 from application.ingredients.models import Ingredient
 from application.recipes.models import Recipe, RecipeIngredient
 
-#ingredients_temp = {}
-id_temp = {}
+
+@app.route("/recipes/", methods=["GET"])
+def recipes_index():
+    return render_template("recipes/list.html", recipes=Recipe.query.all())
+
+
+@app.route("/recipes/new/", methods=["GET"])
+def recipe_form():
+    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
+                           ingredients_temp={})
 
 
 @app.route("/recipes/create/", methods=["POST"])
@@ -26,42 +34,36 @@ def create_recipe():
         db.session().add(ri)
 
     db.session().commit()
-
     return "OK"
 
 
-@app.route("/recipes/new/", methods=["GET"])
-def recipe_form():
-    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp={})
+@app.route("/recipes/<recipe_id>/edit", methods=["GET"])
+def edit_recipe(recipe_id):
+    r = Recipe.query.get(recipe_id)
+    r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
+    ingredients = link_amounts(r_i)
+    return render_template("recipes/edit.html", recipe=r, ingredients=ingredients)
 
 
-@app.route("/recipes/new/", methods=["POST"])
-def add_to_recipe():
+@app.route("/recipes/<recipe_id>/save/", methods=["POST"])
+def save_changes(recipe_id):
     data = request.get_json()
-    name = data['name']
-    instructions = data['instructions']
+    r = Recipe.query.get(recipe_id)
+    r.name = data['name']
+    r.instructions = data['instructions']
     ingredients = data['ingredients']
-    for item in ingredients:
-        print(item)
-    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp=ingredients, name_temp="haha", instructions_temp=instructions)
 
+    id_list = {item['id']: item['amount'] for item in ingredients}
+    ri_list = RecipeIngredient.query.filter_by(recipe_id=recipe_id).all()
 
-@app.route("/recipes/clear", methods=["POST"])
-def clear_selection():
-    data = request.get_json()
-    name = data['name']
-    instructions = data['instructions']
-    ingredients = data['ingredients']
-    for key, value in data.items():
-        print(key)
-        print(value)
-    for i in data['ingredients']:
-        for key, value in i.items():
-            print(key + ": " + value)
-    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp=ingredients, name_temp=name, instructions_temp=instructions)
+    for ingredient in ri_list:
+        if str(ingredient.ingredient_id) not in id_list:
+            db.session.delete(ingredient)
+        else:
+            ingredient.amount = id_list[str(ingredient.ingredient_id)]
+
+    db.session.commit()
+    return "OK"
 
 
 @app.route("/recipes/<recipe_id>/", methods=["GET"])
@@ -81,44 +83,6 @@ def delete_recipe(recipe_id):
     db.session.delete(r)
     db.session.commit()
     return redirect(url_for("recipes_index"))
-
-
-@app.route("/recipes/<recipe_id>/edit", methods=["GET"])
-def edit_recipe(recipe_id):
-    r = Recipe.query.get(recipe_id)
-    r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
-    ingredients = link_amounts(r_i)
-    return render_template("recipes/edit.html", recipe=r, ingredients=ingredients)
-
-
-@app.route("/recipes/<recipe_id>/save", methods=["POST"])
-def save_changes(recipe_id):
-    r = Recipe.query.get(recipe_id)
-    r.name = request.form.get("name")
-    r.instructions = request.form.get("instructions")
-    db.session.commit()
-    return redirect(url_for("view_recipe", recipe_id=recipe_id))
-
-
-@app.route("/recipes/", methods=["GET"])
-def recipes_index():
-    return render_template("recipes/list.html", recipes=Recipe.query.all())
-
-
-@app.route("/recipes/json", methods=["POST"])
-def get_json():
-    stuff = request.get_json()
-    name = stuff['name']
-    instructions = stuff['instructions']
-    for key, value in stuff.items():
-        print(key)
-        print(value)
-    for i in stuff['ingredients']:
-        for key, value in i.items():
-            print("*************")
-            print(key + ": " + value)
-            print("*************")
-    return "OK"
 
 
 def link_amounts(r_i):

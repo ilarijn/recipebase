@@ -1,29 +1,32 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<div id="main">
+    <table id="{{ recipe.id }}" name="recipe">
+        <tr>
+            <td>Recipe name <input type="text" id="namefield" name="name" value="{{ recipe.name }}" /></td>
+        </tr>
+        <tr>
+            <td>Instructions <textarea id="instrfield" name="instructions">{{ recipe.instructions }}</textarea></td>
+        </tr>
+    </table>
 
-<form method="POST" id="edit" action="{{ url_for('save_changes', recipe_id=recipe.id) }}">
-<table>
-        <tr>
-            <td>Recipe name <input type="text" name="name" value="{{ recipe.name }}" /></td>
-        </tr>
-        <tr>
-            <td>Instructions <textarea name="instructions">{{ recipe.instructions }}</textarea></td>
-        </tr>
-    </form>
-    {% for key, value in ingredients.items() %}
-    <tr>
-        <td>
-            {{ key.name }}
-        </td>
-        <td>
-            {{ value }}
-        </td>
-        <td>
-            {{ key.unit }}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<input type="submit" value="Save changes" form="edit" />
+    <table id="added_ingredients">
+        <tbody>
+            {% for key, value in ingredients.items() %}
+            <tr class="ingredient" id="{{ key.id }}">
+                <td class="name"> {{ key.name }} </td>
+                <td class="amount"><input type="text" value="{{ value }}" /> </td>
+                <td class="unit"> {{ key.unit }} </td>
+                <td><button name="remove_button">Remove</button> </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <button name="save_button">Save</button>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='edit.js') }}"></script>
 {% endblock %}

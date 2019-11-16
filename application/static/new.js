@@ -2,7 +2,6 @@ $(document).ready(function () {
 
     $(function () {
         $('button[name="add_button"]').click(function () {
-
             var add = $(this).parent().parent();
             obj = {};
             $cells = $(add).children();
@@ -42,10 +41,10 @@ $(document).ready(function () {
     });
 
     $(document).on('click', 'button[name="create_button"]', function () {
-        var id_list = []
+        var id_list = [];
         $("#added_ingredients tr.ingredient").each(function () {
             var ingredients_list = [];
-            obj = {}
+            obj = {};
             $cells = $(this).children();
             $cells.each(function (cell) {
                 var attr = $(this).attr('class');
@@ -55,8 +54,8 @@ $(document).ready(function () {
             });
             obj['id'] = $(this).attr('id');
             id_list.push(obj);
-
         });
+        
         $.ajax({
             url: "/recipes/create/",
             contentType: "application/json; charset=utf-8",
