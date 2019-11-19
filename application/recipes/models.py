@@ -16,9 +16,13 @@ class Recipe(db.Model):
 
     name = db.Column(db.String(144), nullable=False)
     instructions = db.Column(db.Text, nullable=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-
+    time = db.Column(db.Integer)
+    servings = db.Column(db.Integer)
     ingredients = db.relationship("RecipeIngredient")
+
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
+                           nullable=False)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __init__(self, name):
         self.name = name

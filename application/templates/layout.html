@@ -4,19 +4,27 @@
 <head>
     <meta charset="utf-8">
     <title>recipebase</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/new.css') }}">
 </head>
 
 <body>
-    <script src="{{ url_for('static', filename='lib/jquery-3.4.1.js') }}" type="text/javascript"></script>
 
-    <table cellpadding="10">
-        <tr>
-            <td><a href="{{ url_for('recipe_form') }}">Add a recipe</a></td>
-            <td><a href="{{ url_for('ingredients_form') }}">Add an ingredient</a></td>
-            <td><a href="{{ url_for('recipes_index') }}">List recipes</a></td>
-            <td><a href="{{ url_for('ingredients_index') }}">List ingredients</a></td>
-        </tr>
-    </table>
+    <script src="{{ url_for('static', filename='lib/jquery-3.4.1.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='lib/jquery-ui.js') }}" type="text/javascript"></script>
+
+    <ul class="menubar">
+        <li class="menu"><a href="{{ url_for('recipe_form') }}">Add a recipe</a></li>
+        <li class="menu"><a href="{{ url_for('ingredients_form') }}">Add an ingredient</a></li>
+        <li class="menu"><a href="{{ url_for('recipes_index') }}">List recipes</a></li>
+        <li class="menu"><a href="{{ url_for('ingredients_index') }}">List ingredients</a></li>
+        {% if current_user.is_authenticated %}
+        <li style="float: right;"><a class="active" href="{{ url_for('auth_logout') }}">Log out</a></li>
+        <li class="user">{{ current_user.name }}</li>
+        {% else %}
+        <li style="float: right;" class="menu"><a class="active" href="{{ url_for('auth_login') }}">Log in</a></li>
+        {% endif %}
+    </ul>
 
     {% block body %}
     <p>

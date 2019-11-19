@@ -1,5 +1,7 @@
+from flask import render_template, request, redirect, url_for, json, abort
+from flask_login import login_required, current_user
+
 from application import app, db
-from flask import render_template, request, redirect, url_for, json
 from application.ingredients.models import Ingredient
 from application.recipes.models import Recipe, RecipeIngredient
 
@@ -11,30 +13,31 @@ def recipes_index():
 
 @app.route("/recipes/new/", methods=["GET"])
 def recipe_form():
-    return render_template("recipes/new.html", ingredients=Ingredient.query.all(),
-                           ingredients_temp={})
+    return render_template("recipes/new.html")
 
 
 @app.route("/recipes/create/", methods=["POST"])
 def create_recipe():
-    data = request.get_json()
-    name = data['name']
-    instructions = data['instructions']
-    ingredients = data['ingredients']
+    if current_user.is_authenticated:
+        data = request.get_json()
+        name = data['name']
+        instructions = data['instructions']
+        ingredients = data['ingredients']
 
-    r = Recipe(name)
-    r.instructions = instructions
+        r = Recipe(name)
+        r.instructions = instructions
+        r.account_id = current_user.id
 
-    db.session().add(r)
-    db.session().flush()
+        db.session().add(r)
+        db.session().flush()
 
-    for i in ingredients:
-        ri = RecipeIngredient(
-            recipe_id=r.id, ingredient_id=i['id'], amount=i['amount'])
-        db.session().add(ri)
+        create_ingredients(ingredients, r.id)
 
-    db.session().commit()
-    return "OK"
+        db.session().commit()
+        return "OK"
+
+    else:
+        abort(400)
 
 
 @app.route("/recipes/<recipe_id>/edit", methods=["GET"])
@@ -60,7 +63,10 @@ def save_changes(recipe_id):
         if str(ingredient.ingredient_id) not in id_list:
             db.session.delete(ingredient)
         else:
-            ingredient.amount = id_list[str(ingredient.ingredient_id)]
+            ingredient.amount = id_list.pop(str(ingredient.ingredient_id))
+
+    create_ingredients(
+        [item for item in ingredients if item['id'] in id_list], r.id)
 
     db.session.commit()
     return "OK"
@@ -83,6 +89,25 @@ def delete_recipe(recipe_id):
     db.session.delete(r)
     db.session.commit()
     return redirect(url_for("recipes_index"))
+
+
+def create_ingredients(ingredients, recipe_id):
+    for i in ingredients:
+        ingredient_id = None
+        if i['id'] == "":
+            new = Ingredient(
+                name=i['name'], unit=i['unit'], category=i['category'])
+            if i['kcal'] != "":
+                new.kcal = int(i['kcal'])
+            db.session().add(new)
+            db.session().flush()
+            ingredient_id = new.id
+        else:
+            ingredient_id = i['id']
+        ri = RecipeIngredient(
+            recipe_id=recipe_id, ingredient_id=ingredient_id, amount=i['amount'])
+        db.session().add(ri)
+    return
 
 
 def link_amounts(r_i):

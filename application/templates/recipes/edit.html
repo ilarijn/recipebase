@@ -14,9 +14,10 @@
     <table id="added_ingredients">
         <tbody>
             {% for key, value in ingredients.items() %}
-            <tr class="ingredient" id="{{ key.id }}">
+            <tr class="ingredient">
+                <td style="display:none;" class="id">{{ key.id }}</td>
                 <td class="name"> {{ key.name }} </td>
-                <td class="amount"><input type="text" value="{{ value }}" /> </td>
+                <td class="amount">{{ value }} </td>
                 <td class="unit"> {{ key.unit }} </td>
                 <td><button name="remove_button">Remove</button> </td>
             </tr>
@@ -24,9 +25,30 @@
         </tbody>
     </table>
 
+    <table id="ingredient_list">
+        <tr>
+            <th>Ingredient</th>
+            <th>Amount</th>
+            <th>Unit</th>
+            <th>kcal per unit</th>
+            <th>Category</th>
+        </tr>
+
+        <tr class="ingredient">
+            <td style="display:none;" class="id"><input type="hidden" id="ingredient_id"></td>
+            <td class="name"><input id="new_ingredient" type="text" /></td>
+            <td class="amount"><input type="text" /></td>
+            <td class="unit"><input id="ingredient_unit" type="text" /></td>
+            <td class="kcal"><input id="ingredient_kcal" type="text" /></td>
+            <td class="category"><input id="ingredient_category" type="text" /></td>
+            <td><button name="add_button" type="button">Add</button></td>
+            <td><button name="clear_button" type="button">Clear</button></td>
+        </tr>
+
+    </table>
     <br>
 
     <button name="save_button">Save</button>
 </div>
-<script type="text/javascript" src="{{ url_for('static', filename='edit.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='new.js') }}"></script>
 {% endblock %}

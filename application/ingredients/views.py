@@ -1,5 +1,6 @@
 from application import app, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, json, jsonify
+from sqlalchemy.exc import IntegrityError
 from application.ingredients.models import Ingredient
 
 
@@ -17,6 +18,19 @@ def ingredients_form():
 def ingredients_create():
     i = Ingredient(request.form.get("name"), request.form.get(
         "category"), request.form.get("unit"))
-    db.session().add(i)
-    db.session().commit()
+    try:
+        db.session().add(i)
+        db.session().commit()
+    except IntegrityError as error:
+        print(error)
     return redirect(url_for("ingredients_index"))
+
+
+@app.route("/ingredients/list/", methods=["GET"])
+def ingredients_json():
+    ingredients = Ingredient.query.all()
+    json_list = []
+    for i in ingredients:
+        obj = {attr: value for attr, value in i.__dict__.items() if not str(attr).startswith("_")}
+        json_list.append(obj)
+    return json.dumps(json_list)
