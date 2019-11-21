@@ -6,12 +6,14 @@
       <th>Ingredient</th>
       <th>Category</th>
       <th>Unit</th>
+      <th>kcal per unit</th>
     </tr>
     {% for ingredient in ingredients %}
     <tr>
       <td>{{ ingredient.name }}</td>
       <td>{{ ingredient.category }}</td>
       <td>{{ ingredient.unit }}</td>
+      <td>{{ ingredient.kcal }}</td>
     </tr>
     {% endfor %}
   </table>

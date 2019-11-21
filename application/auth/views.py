@@ -1,9 +1,10 @@
-from flask import render_template, request, redirect, url_for
-from flask_login import login_user, logout_user
+from flask import render_template, request, redirect, url_for, abort
+from flask_login import login_user, logout_user, current_user, login_required
+from sqlalchemy.exc import IntegrityError
 
-from application import app
+from application import app, db
 from application.auth.models import User
-from application.auth.forms import LoginForm
+from application.auth.forms import LoginForm, UserForm
 
 
 @app.route("/auth/login", methods=["GET", "POST"])
@@ -12,7 +13,6 @@ def auth_login():
         return render_template("auth/loginform.html", form=LoginForm())
 
     form = LoginForm(request.form)
-    # mahdolliset validoinnit
 
     user = User.query.filter_by(
         username=form.username.data, password=form.password.data).first()
@@ -28,4 +28,37 @@ def auth_login():
 @app.route("/auth/logout")
 def auth_logout():
     logout_user()
-    return redirect(url_for("index")) 
+    return redirect(url_for("index"))
+
+
+@app.route("/auth/admin", methods=["GET"])
+@login_required
+def view_admin():
+    user = User.query.get(current_user.id)
+    if user.username == "admin":
+        return render_template("auth/admin.html", form=UserForm(), users=User.query.all())
+    else:
+        abort(403)
+
+
+@app.route("/auth/users", methods=["POST"])
+@login_required
+def user_create():
+    user = User.query.get(current_user.id)
+    form = UserForm(request.form)
+    if not form.validate():
+        return render_template("auth/admin.html", form=form, users=User.query.all())
+    if user.username == "admin":
+        u = User(username=form.username.data,
+                 name=form.name.data, password=form.password.data)
+
+        try:
+            db.session.add(u)
+            db.session.commit()
+        except IntegrityError as error:
+            db.session.rollback()
+            return render_template("auth/admin.html", form=form, db_error=error, users=User.query.all())
+
+        return redirect(url_for("view_admin"))
+    else:
+        abort(403)

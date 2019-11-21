@@ -4,7 +4,8 @@
 <table>
   {% for recipe in recipes %}
   <tr>
-    <td><a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a></td>
+    <td><a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a> by {{ recipe.account_name }}</td>
+    {% if current_user.is_authenticated and recipe.account_id == account_id %}
     <td>
       <form method="GET" action="{{ url_for('edit_recipe', recipe_id=recipe.id) }}">
         <input type="submit" value="Edit" />
@@ -15,6 +16,7 @@
         <input type="submit" value="Delete" />
       </form>
     </td>
+    {% endif %}
   </tr>
   {% endfor %}
 </table>

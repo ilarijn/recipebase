@@ -3,15 +3,17 @@
 {% block body %}
 <h2>{{ recipe.name }}</h2>
 <p>{{ recipe.date_created }}</p>
+<p>Servings: {{ recipe.servings }}</p>
 <table>
-  {% for ingredient, amount in ingredients.items() %}
+  {% for ingredient in ingredients %}
   <tr>
-    <td>{{ amount }}</td>
-    <td>{{ ingredient.unit }}</td>
-    <td>{{ ingredient.name }}</td>
+    <td>{{ ingredient['amount'] }}</td>
+    <td>{{ ingredient['unit'] }}</td>
+    <td>{{ ingredient['name'] }}</td>
   </tr>
   {% endfor %}
 </table>
+<br>
 <p>
   {{ recipe.instructions }}
 </p>

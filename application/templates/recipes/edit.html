@@ -1,54 +1,82 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div id="main">
-    <table id="{{ recipe.id }}" name="recipe">
-        <tr>
-            <td>Recipe name <input type="text" id="namefield" name="name" value="{{ recipe.name }}" /></td>
-        </tr>
-        <tr>
-            <td>Instructions <textarea id="instrfield" name="instructions">{{ recipe.instructions }}</textarea></td>
-        </tr>
-    </table>
 
-    <table id="added_ingredients">
-        <tbody>
-            {% for key, value in ingredients.items() %}
-            <tr class="ingredient">
-                <td style="display:none;" class="id">{{ key.id }}</td>
-                <td class="name"> {{ key.name }} </td>
-                <td class="amount">{{ value }} </td>
-                <td class="unit"> {{ key.unit }} </td>
-                <td><button name="remove_button">Remove</button> </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div id="main_view">
+    <div class="row justify-content-around">
 
-    <table id="ingredient_list">
-        <tr>
-            <th>Ingredient</th>
-            <th>Amount</th>
-            <th>Unit</th>
-            <th>kcal per unit</th>
-            <th>Category</th>
-        </tr>
+        <div class="col-5">
+            <div class="form-group row">
+                <div class="col-9">
+                    <input type="hidden" id="recipe_id" value="{{ recipe.id }}">
+                    <label for="namefield">Recipe name</label>
+                    <input type="text" class="form-control" id="namefield" value="{{ recipe.name }}">
+                </div>
+                <div class="col-3">
+                    <label for="servings">Servings</label>
+                    <input type="number" class="form-control" id="servingsfield" value="2">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="instrfield">Instructions</label>
+                <textarea id="instrfield" class="form-control" rows="12">{{ recipe.instructions }}</textarea>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <button name="save_button" type="button" class="btn btn-primary"
+                        style="background-color: #024700;">Save changes</button>
+                </div>
+                <div class="col-6" id="error">
 
-        <tr class="ingredient">
-            <td style="display:none;" class="id"><input type="hidden" id="ingredient_id"></td>
-            <td class="name"><input id="new_ingredient" type="text" /></td>
-            <td class="amount"><input type="text" /></td>
-            <td class="unit"><input id="ingredient_unit" type="text" /></td>
-            <td class="kcal"><input id="ingredient_kcal" type="text" /></td>
-            <td class="category"><input id="ingredient_category" type="text" /></td>
-            <td><button name="add_button" type="button">Add</button></td>
-            <td><button name="clear_button" type="button">Clear</button></td>
-        </tr>
+                </div>
+            </div>
 
-    </table>
-    <br>
+        </div>
 
-    <button name="save_button">Save</button>
+        <div class="col-6">
+            <div class="form-row" style="margin-bottom: 50px;">
+                <input type="hidden" id="add_id">
+                <div class="col-6">
+                    <label for="name">Ingredient</label>
+                    <input type="text" class="form-control" id="add_name">
+                </div>
+                <div class="col-2">
+                    <label for="amount">Amount</label>
+                    <input type="number" class="form-control" id="add_amount">
+                </div>
+                <div class="col-2">
+                    <label for="unit">Unit</label>
+                    <input type="text" class="form-control" id="add_unit">
+                </div>
+                <div class="col-1">
+                    <label>&nbsp;</label>
+                    <button name="add_button" type="button" class="btn btn-primary"
+                        style="background-color: #024700;">Add</button>
+                </div>
+            </div>
+            <div class="col-2" id="error-add">
+
+            </div>
+            <div>
+                <ul class="list-unstyled" id="added_ingredients">
+                    {% for ingredient in ingredients %}
+                    <li class="ingredient">
+                        <input type="hidden" id="id" value="{{ ingredient['id'] }}">
+                        <input type="hidden" id="name" value="{{ ingredient['name'] }}">
+                        <input type="hidden" id="amount" value="{{ ingredient['amount'] }}">
+                        <input type="hidden" id="unit" value="{{ ingredient['unit'] }}">
+                        <div class="col-11">{{ ingredient['amount'] }} {{ ingredient['unit'] }}
+                            {{ ingredient['name'] }}<button type="button" name="remove_button" class="close"
+                                aria-label="Close"><span aria-hidden="true">&times;</span>
+                            </button></div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript" src="{{ url_for('static', filename='new.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='recipes.js') }}"></script>
+
 {% endblock %}

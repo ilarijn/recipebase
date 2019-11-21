@@ -1,19 +1,57 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Unit</th>
-  </tr>
-  <tr>
-    <form method="POST" action="{{ url_for('ingredients_create') }}">
-      <td> <input type="text" name="name" /></td>
-      <td> <input type="text" name="category" /></td>
-      <td> <input type="text" name="unit" /></td>
-      <td> <input type="submit" value="Add a new ingredient" /></td>
-  </tr>
-  </form>
-</table>
+
+<form method="POST" action="{{ url_for('ingredients_create') }}">
+  <table>
+    <tr>
+      <td> {{ form.name.label }} </td>
+      <td> {{ form.name }} </td>
+      <td>
+        <ul>
+          {% for error in form.name.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td> {{ form.category.label }} </td>
+      <td> {{ form.category }} </td>
+      <td>
+        <ul>
+          {% for error in form.category.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td> {{ form.unit.label }} </td>
+      <td> {{ form.unit }} </td>
+      <td>
+        <ul>
+          {% for error in form.unit.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td> {{ form.kcal.label }} </td>
+      <td> {{ form.kcal }} </td>
+      <td>
+        <ul>
+          {% for error in form.kcal.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"> <input type="submit" value="Create" /> </td>
+    </tr>
+</form>
+
+
 {% endblock %}

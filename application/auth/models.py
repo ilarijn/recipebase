@@ -11,7 +11,7 @@ class User(db.Model):
                               onupdate=db.func.current_timestamp())
 
     name = db.Column(db.String(144), nullable=False)
-    username = db.Column(db.String(144), nullable=False)
+    username = db.Column(db.String(144), nullable=False, unique=True)
     password = db.Column(db.String(144), nullable=False)
 
     recipes = db.relationship("Recipe", backref='account', lazy=True)
@@ -23,6 +23,9 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
+
+    def get_username(self):
+        return self.username
 
     def is_active(self):
         return True

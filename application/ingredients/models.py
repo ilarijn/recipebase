@@ -9,11 +9,6 @@ class Ingredient(db.Model):
     unit = db.Column(db.String(20), nullable=True)
     kcal = db.Column(db.Integer)
    
-    def __init__(self, name, category, unit):
-        self.name = name
-        self.category = category
-        self.unit = unit
-
     def __hash__(self):
         return hash((self.name, self.id))
 

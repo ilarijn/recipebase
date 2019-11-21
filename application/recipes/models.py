@@ -9,6 +9,7 @@ class RecipeIngredient(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey(
         'ingredient.id'))
     amount = db.Column(db.Integer)
+    unit = db.Column(db.String)
 
 
 class Recipe(db.Model):
@@ -22,6 +23,7 @@ class Recipe(db.Model):
 
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                            nullable=False)
+    account_name = db.Column(db.String)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __init__(self, name):
