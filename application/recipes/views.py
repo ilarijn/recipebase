@@ -16,6 +16,24 @@ def recipes_index():
     return render_template("recipes/list.html", recipes=Recipe.query.all(), account_id=account_id)
 
 
+@app.route("/recipes/search/", methods=["GET", "POST"])
+def recipes_search():
+    if request.method == 'POST':
+        id_list = Recipe.find_recipes_by_ingredient_category(
+            request.form.get("search"))
+        results = []
+        for i in id_list:
+            results.append(Recipe.query.get(int(i['id'])))
+        account_id = None
+        if current_user.is_authenticated:
+            account_id = current_user.id
+        else:
+            account_id = ""
+        return render_template("recipes/search.html", results=results, account_id=account_id)
+    else:
+        return render_template("recipes/search.html", results=[])
+
+
 @app.route("/recipes/new/", methods=["GET"])
 @login_required
 def recipe_form():

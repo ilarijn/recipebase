@@ -1,5 +1,11 @@
 https://recipebase.herokuapp.com
 
+Testaamaan pääsee tunnuksilla user1:user1 ja user2:user2. 
+Kaikki tietokannassa olevat ainekset pitäisivät olla kaikkien käyttäjien saatavilla. Reseptejä pääsee muokkaamaan vain reseptin luonut käyttäjä. 
+Hakutoiminnon on tarkoitus antaa kaikki reseptit, joissa on hakutermiä vastaavalla kategorialla varustettu aines.
+
+***
+
 #### recipebase
 The aim is to create a database of ingredients and recipes. Users may create and store recipes using ingredients in the database and add missing ingredients to the database. Users may make recipes public to be viewed by anyone or keep them private. Recipes may be searched for using different parameters: by recipe name, recipe time, ingredient name, ingredient category or different combinations.
 Tags for recipes might be added later for more search options.
@@ -10,17 +16,14 @@ Tags for recipes might be added later for more search options.
 
 
 ##### Current version
-Authorized users can create, delete, view and edit recipes. A recipe has a name, instructions, creation timestamp and a list of associated ingredients. An ingredient is connected to a recipe via an association object that also stores the amount.
+Authorized users can create, delete, view and edit recipes. Unauthorized users can view and search for recipes. Currently all recipes are visible to all. 
 
-Ingredients existing in the database can be added to recipes via a jQuery autocomplete function. New ingredients are automatically added to the database at recipe creation, and they can also be added and viewed separately. At this time ingredient properties consist of a name, category, unit of measurement and a kcal per unit value.
+A recipe has a name, instructions, creation timestamp and a list of associated ingredients. An ingredient is connected to a recipe via an association object that also stores amount and unit of measurement used in recipe.
 
+Ingredients in the database can be added to recipes via a jQuery autocomplete function. New ingredients are automatically added to the database at recipe creation, and they can also be added and viewed separately. Currently all ingredients are visible to all authorized users.
 
-##### Todo
-- Link added ingredient to user: the idea is for a user to be able to maintain their own customizable collection of preferred ingredients, not provide a huge default selection
-- Public/private toggle for recipes
-- Appropriate login-required checks for actions
-- Admin view for managing users etc.
-- Do not lock empty fields as readonly when retrieving ingredients to enable updates
+Kcal values for ingredients and time for recipes exist in the db but are not utilized yet.
+
 
 [Current database diagram](documentation/current_diagram.png)
 
