@@ -32,7 +32,7 @@ class Recipe(db.Model):
 
     @staticmethod
     def find_recipes_by_ingredient_category(category):
-        stmt = text("SELECT Recipe.id FROM Recipe " 
+        stmt = text("SELECT DISTINCT Recipe.id FROM Recipe " 
         "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
         "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
         "WHERE (Ingredient.category = :category);").params(category=category)
