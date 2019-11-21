@@ -27,9 +27,10 @@ def ingredients_create():
     i = Ingredient(name=form.name.data, category=form.category.data,
                    unit=form.unit.data)
     kcal = form.kcal.data
-    if kcal == "":
-        kcal == None
-    i.kcal = kcal
+    if str(kcal).isnumeric():
+        i.kcal = int(i['kcal'])
+    else:
+        i.kcal = None
     try:
         db.session().add(i)
         db.session().commit()
@@ -58,8 +59,8 @@ def update_json():
         update = Ingredient.query.get(int(i['id']))
         update.category = i['category']
         update.unit = i['unit']
-        if update.kcal != "":
-            update.kcal = i['kcal']
+        if str(i['kcal']).isnumeric():
+            update.kcal = int(i['kcal'])
         else:
             update.kcal = None
     db.session.commit()
