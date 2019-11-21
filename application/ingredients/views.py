@@ -25,7 +25,11 @@ def ingredients_create():
     if not form.validate():
         return render_template("ingredients/new.html", form=form)
     i = Ingredient(name=form.name.data, category=form.category.data,
-                   unit=form.unit.data, kcal=form.kcal.data)
+                   unit=form.unit.data)
+    kcal = form.kcal.data
+    if kcal == "":
+        kcal == None
+    i.kcal = kcal
     try:
         db.session().add(i)
         db.session().commit()
@@ -51,10 +55,12 @@ def ingredients_json():
 def update_json():
     ingredients = request.get_json()
     for i in ingredients:
-        update_ing = Ingredient.query.get(i['id'])
-        update_ing.category = i['category']
-        update_ing.unit = i['unit']
-        if update_ing.kcal != "":
-            update_ing.kcal = i['kcal']
+        update = Ingredient.query.get(int(i['id']))
+        update.category = i['category']
+        update.unit = i['unit']
+        if update.kcal != "":
+            update.kcal = i['kcal']
+        else:
+            update.kcal = None
     db.session.commit()
     return redirect(url_for("recipes_index"))
