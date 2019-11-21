@@ -51,11 +51,10 @@ def ingredients_json():
 def update_json():
     ingredients = request.get_json()
     for i in ingredients:
-        print(i)
-        update = Ingredient.query.get(int(i['id']))
-        update.category = i['category']
-        update.unit = i['unit']
-        if update.kcal != "":
-            update.kcal = i['kcal']
+        update_ing = Ingredient.query.get(int(i['id']))
+        update_ing.category = i['category']
+        update_ing.unit = i['unit']
+        if update_ing.kcal != "":
+            update_ing.kcal = i['kcal']
     db.session.commit()
     return redirect(url_for("recipes_index"))
