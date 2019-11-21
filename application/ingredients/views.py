@@ -53,7 +53,6 @@ def update_json():
     for i in ingredients:
         print(i)
         update = Ingredient.query.get(int(i['id']))
-        print("update object: " + update)
         update.category = i['category']
         update.unit = i['unit']
         if update.kcal != "":
