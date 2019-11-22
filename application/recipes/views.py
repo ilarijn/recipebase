@@ -19,12 +19,8 @@ def recipes_index():
 @app.route("/recipes/search/", methods=["GET", "POST"])
 def recipes_search():
     if request.method == 'POST':
-        id_list = Recipe.find_recipes_by_ingredient_category(
-            request.form.get("search"))
-        results = []
-        for i in id_list:
-            results.append(Recipe.query.get(int(i['id'])))
-        account_id = None
+        results = Recipe.search_by_term(recipe=request.form.get("recipe"), ingredient=request.form.get("ingredient"),
+                                        category=request.form.get("category"), term=request.form.get("search"))
         if current_user.is_authenticated:
             account_id = current_user.id
         else:

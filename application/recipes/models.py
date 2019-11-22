@@ -2,6 +2,7 @@ from application import db
 from application.ingredients import models
 from sqlalchemy.sql import text
 
+
 class RecipeIngredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey(
@@ -29,18 +30,38 @@ class Recipe(db.Model):
     def __init__(self, name):
         self.name = name
 
-
     @staticmethod
-    def find_recipes_by_ingredient_category(category):
-        stmt = text("SELECT DISTINCT Recipe.id FROM Recipe " 
-        "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
-        "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
-        "WHERE (Ingredient.category = :category);").params(category=category)
-        res = db.engine.execute(stmt)
+    def search_by_term(recipe, ingredient, category, term):
+        query = ("SELECT DISTINCT Recipe.name, Recipe.account_name, Recipe.id FROM Recipe "
+                 "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
+                 "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
+                 "WHERE ")
 
+        r_query = "(Recipe.name LIKE :term)"
+        i_query = "(Ingredient.name LIKE :term)"
+        c_query = "(Ingredient.category LIKE :term)"
+        term = "%"+term+"%"
+
+        if recipe:
+            query += r_query
+        if ingredient and recipe:
+            query += " OR " + i_query
+            if category:
+                query += " OR " + c_query
+        elif ingredient:
+            query += i_query
+            if category:
+                query += " OR " + c_query
+        if recipe and category:
+            query += " OR " + c_query
+        elif category:
+            query += c_query
+
+        stmt = text(query).params(term=term)
+        res = db.engine.execute(stmt)
         response = []
         for row in res:
-            response.append({"id": row[0]})
+            response.append(
+                {"name": row[0], "account_name": row[1], "id": row[2]})
 
         return response
-  

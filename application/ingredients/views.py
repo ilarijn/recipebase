@@ -27,10 +27,7 @@ def ingredients_create():
     i = Ingredient(name=form.name.data, category=form.category.data,
                    unit=form.unit.data)
     kcal = form.kcal.data
-    if str(kcal).isnumeric():
-        i.kcal = int(i['kcal'])
-    else:
-        i.kcal = None
+    i.kcal = kcal
     try:
         db.session().add(i)
         db.session().commit()

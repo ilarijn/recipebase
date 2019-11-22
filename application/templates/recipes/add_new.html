@@ -27,7 +27,7 @@
 
 <div class="form-group row">
     <div class="col-4">
-        <button id="save_new_button" class="btn btn-primary" style="background-color: #024700;">Save</button>
+        <button id="save_new_button" class="btn btn-outline-primary" style="background-color: #024700;">Save</button>
     </div>
     <div class="col-6" id="error">
 
@@ -45,7 +45,7 @@
             });
             var amount = obj['kcal'];
             if (Math.floor(amount) != amount || !($.isNumeric(amount))) {
-                obj['kcal'] == '';
+                obj['kcal'] = null;
             }
             ingredients.push(obj);
         });

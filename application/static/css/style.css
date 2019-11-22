@@ -1,3 +1,52 @@
+/* General */
+
+
+:root {
+    --button-background-color: #024700;    
+  }
+
+.btn-primary {
+    background-color: var(--button-background-color) !important;
+}
+
+.btn-outline-primary {
+    color: var(--button-background-color) !important;
+    border-color: var(--button-background-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--button-background-color) !important;
+    color: white !important;
+}
+
+.btn-group {
+    margin: 5px;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before,
+.custom-control-input:focus~custom-control-label::before,
+.custom-control-input:focus,
+.custom-control-input~.custom-control-indicator,
+.custom-control-input:focus~.custom-control-indicator
+ {
+    background-color: #024700 !important;
+    box-shadow:none !important;
+    outline:0;
+  }
+
+.custom-checkbox {
+    margin: 5px 5px;
+  }
+
+.form-control:focus,
+.btn-outline-primary:focus {
+    border-color: #d6d6d6 !important;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(141, 141, 141, 0.5) !important;
+  }
+
+
+
+
 /* Navbar */
 .navbar-custom {
     background-color: rgb(2, 71, 0);
@@ -22,6 +71,20 @@
     color:whitesmoke;
 }
 
+
+/* Search view */
+
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}
+
+
+
+/* Recipe creation form */
+
 li.ingredient {
     
     padding: 5px 0px;
@@ -33,7 +96,10 @@ main {
     padding-right: 50px; 
 }
 
+
+
 /* Autocomplete */
+
 li.autocomplete {
     display: block;
     color: black;

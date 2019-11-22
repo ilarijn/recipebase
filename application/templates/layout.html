@@ -20,32 +20,33 @@
         crossorigin="anonymous"></script>
 
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="{{ url_for('recipes_index') }}">recipebase <img
+        <a class="navbar-brand" href="{{ url_for('recipes_search') }}">recipebase <img
                 src="{{ url_for('static', filename='img/forkandknife_white.png') }}" class="img-fluid"
                 alt="Responsive image"></a>
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Recipes
+                </a>
+                <div class="dropdown-menu dropdown-menu-left">
+                    {% if current_user.is_authenticated %}
+                    <a class="dropdown-item" href="{{ url_for('recipe_form') }}">Add a recipe</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{{ url_for('recipes_index') }}">List recipes</a>
+                </div>
+                <div class="dropdown-menu dropdown-menu-left">
+                    <a class="dropdown-item" href="{{ url_for('recipes_index') }}">List recipes</a>
+                </div>
+            </li>
             {% if current_user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('recipe_form') }}">Add a recipe</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('ingredients_form') }}">Add an ingredient</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('recipes_index') }}">List recipes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('recipes_search') }}">Search recipes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('ingredients_index') }}">List ingredients</a>
-            </li class="nav-item">
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('recipes_index') }}">List recipes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('recipes_search') }}">Search recipes</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Ingredients
+                </a>
+                <div class="dropdown-menu dropdown-menu-left">
+                    <a class="dropdown-item" href="{{ url_for('ingredients_form') }}">Add an ingredient</a>
+                    <a class="dropdown-item" href="{{ url_for('ingredients_index') }}">List ingredients</a>
+                </div>
             </li>
             {% endif %}
         </ul>

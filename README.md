@@ -25,5 +25,8 @@ Ingredients in the database can be added to recipes via a jQuery autocomplete fu
 Kcal values for ingredients and time for recipes exist in the db but are not utilized yet.
 
 
+#### Todo
+- Search query that also returns all ingredients and categories matched without duplicate recipe name rows
+
 [Current database diagram](documentation/current_diagram.png)
 

@@ -1,21 +1,37 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="col-8">
-    <form method="POST" action="{{ url_for('recipes_search') }}">
-        <div class="form-row" style="margin-bottom: 20px;">
-
-            <div class="col-6">
-                <input class="form-control" type="text" name="search"
-                    placeholder="Search for recipes by ingredient category (eg. 'herb')" aria-label="Search">
-            </div>
-            <div class="col-2"> <button name="search_button" type="submit" class="btn btn-primary"
-                    style="background-color: #024700;">Search</button>
-            </div>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <p style="margin-bottom: 30px;">
+            <font size=4>Search for recipes by name, ingredients and/or ingredient categories.</font>
+        </p>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <form method="POST" action="{{ url_for('recipes_search') }}" id="sform">
+                <div class="input-group">
+                    <input class="col-12 form-control" type="text" name="search" id="stext" placeholder="" aria-label="Search">
+                    <button name="search_button" type="submit" class="btn btn-outline-primary">Search</button>
+                </div>
+  
+                <div class="btn-group col-3" data-toggle="toggle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="snam" name="recipe" checked>
+                        <label class="custom-control-label" for="snam">Name</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="sing" name="ingredient" checked>
+                        <label class="custom-control-label" for="sing">Ingredients</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="scat" name="category" checked>
+                        <label class="custom-control-label" for="scat">Categories</label>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-
-
+    </div>
     <table>
         {% for recipe in results %}
         <tr>
@@ -37,4 +53,7 @@
         {% endfor %}
     </table>
 </div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='search.js') }}"></script>
+
 {% endblock %}
