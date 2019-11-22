@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
-
-    //Get ingredients for autocomplete from db
+    //Autocomplete for ingredient name field
     $(function () {
         var ingredients = [];
         $.ajax({
@@ -42,7 +41,6 @@ $(document).ready(function () {
                 return $('<li class="autocomplete">')
                     .append("<div>" + item.name + "<br><font size='1'>" + item.unit + "</font></div>")
                     .appendTo(ul);
-
             };
         $.ui.autocomplete.filter = function (array, term) {
             var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
@@ -96,16 +94,12 @@ $(document).ready(function () {
     //Create the recipe
     $(document).on('click', 'button[name="create_button"], button[name="save_button"]', function () {
         var post_url;
-        var success_message;
 
         if ($(this).is('button[name="create_button"]')) {
             post_url = "/recipes/create/";
-            success_message = "<p>Recipe created!</p>";
         } else if ($(this).is('button[name="save_button"]')) {
             var recipe_id = $('#recipe_id').val();
-            console.log(recipe_id);
             post_url = "/recipes/" + recipe_id + "/save/";
-            success_message = "<p>Changes saved!</p>";
         }
 
         var recipe_name = $("#namefield").val();
@@ -114,7 +108,7 @@ $(document).ready(function () {
         var ingredients = [];
         var new_ingredients = [];
 
-        //Validate recipe name and servings
+        //Validate name, instructions and servings
         if (recipe_name == '' || recipe_name.length < 2) {
             $("#alert-create").children().remove();
             $("#alert-create").append($.fn.yellowAlert('Give a name of at least 2 characters.'));
@@ -127,7 +121,7 @@ $(document).ready(function () {
         }
         if (servings < 1 || !$.isNumeric(servings)) {
             $("#alert-create").children().remove();
-            $("#alert-create").append($.fn.yellowAlert('Invalid amount of servings'));
+            $("#alert-create").append($.fn.yellowAlert('Invalid amount of servings.'));
             return;
         }
         if (recipe_name.match(illegal) || instructions.match(illegal)) {

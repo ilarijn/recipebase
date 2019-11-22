@@ -17,6 +17,7 @@ class UserForm(FlaskForm):
     username = StringField("Username", [validators.Length(
         min=4, max=20, message="Username must be between 4 and 20 characters"),
         validators.Regexp('^\w+$', message="Username can only contain alphanumeric characters")])
-    password=PasswordField("Password", [validators.Length(min=4)])
+    password = PasswordField("Password", [validators.Length(min=4)])
+
     class Meta:
-        csrf=False
+        csrf = False
