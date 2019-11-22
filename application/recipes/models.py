@@ -32,7 +32,7 @@ class Recipe(db.Model):
 
     @staticmethod
     def search_by_term(recipe, ingredient, category, term):
-        query = ("SELECT DISTINCT Recipe.name, Recipe.account_name, Recipe.id FROM Recipe "
+        query = ("SELECT DISTINCT Recipe.name, Recipe.account_name, Recipe.id, Recipe.account_id FROM Recipe "
                  "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
                  "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
                  "WHERE ")
@@ -62,6 +62,6 @@ class Recipe(db.Model):
         response = []
         for row in res:
             response.append(
-                {"name": row[0], "account_name": row[1], "id": row[2]})
+                {"name": row[0], "account_name": row[1], "id": row[2], "account_id": row[3]})
 
         return response

@@ -11,10 +11,11 @@
         <div class="col-md-auto">
             <form method="POST" action="{{ url_for('recipes_search') }}" id="sform">
                 <div class="input-group">
-                    <input class="col-12 form-control" type="text" name="search" id="stext" placeholder="" aria-label="Search">
+                    <input class="col-12 form-control" type="text" name="search" id="stext" placeholder=""
+                        aria-label="Search">
                     <button name="search_button" type="submit" class="btn btn-outline-primary">Search</button>
                 </div>
-  
+
                 <div class="btn-group col-3" data-toggle="toggle">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="snam" name="recipe" checked>

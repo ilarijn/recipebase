@@ -8,23 +8,23 @@ from application.recipes.models import Recipe, RecipeIngredient
 
 @app.route("/recipes/", methods=["GET"])
 def recipes_index():
-    account_id = None
+    account_id = ""
     if current_user.is_authenticated:
         account_id = current_user.id
-    else:
-        account_id = ""
     return render_template("recipes/list.html", recipes=Recipe.query.all(), account_id=account_id)
 
 
 @app.route("/recipes/search/", methods=["GET", "POST"])
 def recipes_search():
     if request.method == 'POST':
-        results = Recipe.search_by_term(recipe=request.form.get("recipe"), ingredient=request.form.get("ingredient"),
-                                        category=request.form.get("category"), term=request.form.get("search"))
+        results = Recipe.search_by_term(recipe=request.form.get("recipe"),
+                                        ingredient=request.form.get(
+                                            "ingredient"),
+                                        category=request.form.get("category"),
+                                        term=request.form.get("search"))
+        account_id = ""
         if current_user.is_authenticated:
             account_id = current_user.id
-        else:
-            account_id = ""
         return render_template("recipes/search.html", results=results, account_id=account_id)
     else:
         return render_template("recipes/search.html", results=[])
