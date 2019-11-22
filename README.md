@@ -1,7 +1,6 @@
 https://recipebase.herokuapp.com
 
-Testaamaan pääsee tunnuksilla user1:user1 ja user2:user2. 
-Kaikki tietokannassa olevat ainekset pitäisivät olla kaikkien käyttäjien saatavilla. Reseptiä pääsee muokkaamaan vain reseptin luonut käyttäjä.
+Create a user at http://recipebase.herokuapp.com/auth/new or login as user1:user1 or user2:user2 to start testing.
 
 ***
 
@@ -26,7 +25,6 @@ Kcal values for ingredients and time for recipes exist in the db but are not uti
 
 #### Todo
 - Search query that also returns all ingredients and categories matched without duplicate recipe name rows
-- Better recipe view and parse textarea value
 - Edit ingredients
 
 [Current database diagram](documentation/current_diagram.png)
