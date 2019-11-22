@@ -1,8 +1,7 @@
 https://recipebase.herokuapp.com
 
 Testaamaan pääsee tunnuksilla user1:user1 ja user2:user2. 
-Kaikki tietokannassa olevat ainekset pitäisivät olla kaikkien käyttäjien saatavilla. Reseptejä pääsee muokkaamaan vain reseptin luonut käyttäjä. 
-Hakutoiminnon on tarkoitus antaa kaikki reseptit, joissa on hakutermiä vastaavalla kategorialla varustettu aines.
+Kaikki tietokannassa olevat ainekset pitäisivät olla kaikkien käyttäjien saatavilla. Reseptiä pääsee muokkaamaan vain reseptin luonut käyttäjä.
 
 ***
 
@@ -27,6 +26,8 @@ Kcal values for ingredients and time for recipes exist in the db but are not uti
 
 #### Todo
 - Search query that also returns all ingredients and categories matched without duplicate recipe name rows
+- Better recipe view and parse textarea value
+- Edit ingredients
 
 [Current database diagram](documentation/current_diagram.png)
 
