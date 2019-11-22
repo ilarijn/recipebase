@@ -1,29 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-{{ error }}
-<form method="POST" action="{{ url_for('auth_login') }}">
-  <table>
-    <tr>
-      <td>
-	{{ form.username.label }}
-      </td>
-      <td>
-	{{ form.username }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-	{{ form.password.label }}
-      </td>
-      <td>
-	{{ form.password }}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-	<input type="submit" value="Login"/>
-      </td>
-    </tr>
-</form>
+
+<div class="container">
+      <div class="row justify-content-md-center">
+            {{ error }}
+      </div>
+      <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+                  <form method="POST" action="{{ url_for('auth_login') }}">
+                        <div class="form-label-group" style="margin-bottom: 10px;">
+                              {{ form.username.label }}
+                              {{ form.username(class="form-control") }}
+                        </div>
+                        <div class="form-label-group">
+                              {{ form.password.label }}
+                              {{ form.password(class="form-control") }}
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary" style="margin-top: 20px;">Login</button>
+                        <div class="col-md-2">
+
+                        </div>
+                  </form>
+
+            </div>
+      </div>
+</div>
 {% endblock %}

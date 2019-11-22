@@ -2,19 +2,17 @@
 
 {% block body %}
 <h2>{{ recipe.name }}</h2>
-<p>{{ recipe.date_created }}</p>
+<p><font size="2">{{ recipe.date_created }}</font></p>
 <p>Servings: {{ recipe.servings }}</p>
-<table>
+<table style="margin-top: 30px;">
   {% for ingredient in ingredients %}
   <tr>
-    <td>{{ ingredient['amount'] }}</td>
-    <td>{{ ingredient['unit'] }}</td>
-    <td>{{ ingredient['name'] }}</td>
+    <td>{{ ingredient['amount'] }} {{ ingredient['unit'] }} {{ ingredient['name'] }}</td>
   </tr>
   {% endfor %}
 </table>
 <br>
-<p>
-  {{ recipe.instructions }}
+<p style="white-space: pre-wrap;">
+{{ recipe.instructions }}
 </p>
 {% endblock %}
