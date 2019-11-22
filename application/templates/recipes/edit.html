@@ -22,11 +22,10 @@
                 <textarea id="instrfield" class="form-control" rows="12">{{ recipe.instructions }}</textarea>
             </div>
             <div class="form-group row">
-                <div class="col-4">
-                    <button name="save_button" type="button" class="btn btn-primary"
-                        style="background-color: #024700;">Save changes</button>
+                <div class="col-3">
+                    <button name="save_button" type="button" class="btn btn-outline-primary">Save changes</button>
                 </div>
-                <div class="col-6" id="error">
+                <div class="col-9" id="alert-create">
 
                 </div>
             </div>
@@ -50,13 +49,13 @@
                 </div>
                 <div class="col-1">
                     <label>&nbsp;</label>
-                    <button name="add_button" type="button" class="btn btn-primary"
-                        style="background-color: #024700;">Add</button>
+                    <button name="add_button" type="button" class="btn btn-outline-primary">Add</button>
+                </div>
+                <div class="col-10" id="alert-add" style="margin-top: 10px;">
+
                 </div>
             </div>
-            <div class="col-2" id="error-add">
 
-            </div>
             <div>
                 <ul class="list-unstyled" id="added_ingredients">
                     {% for ingredient in ingredients %}

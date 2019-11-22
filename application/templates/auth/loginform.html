@@ -3,13 +3,29 @@
 {% block body %}
 
 <div class="container">
-      <div class="row justify-content-md-center">
-            {{ error }}
-      </div>
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center" style="margin-top: 0px;">
+
             <div class="col-md-auto">
+                  {% if error is defined %}
+                  <div class="alert alert-danger alert-dismissible fade show">
+                        {{ error }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  </div>
+                  {% endif %}
+                  {% if success is defined %}
+                  <div class="alert alert-success alert-dismissible fade show">
+                        {{ success }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  </div>
+                  {% endif %}
+            </div>
+
+      </div>
+
+      <div class="row justify-content-md-center">
+            <div class="col col-lg-4">
                   <form method="POST" action="{{ url_for('auth_login') }}">
-                        <div class="form-label-group" style="margin-bottom: 10px;">
+                        <div class="form-label-group" style="margin-bottom: 10px; margin-top: 20px;">
                               {{ form.username.label }}
                               {{ form.username(class="form-control") }}
                         </div>
@@ -18,12 +34,14 @@
                               {{ form.password(class="form-control") }}
                         </div>
                         <button type="submit" class="btn btn-outline-primary" style="margin-top: 20px;">Login</button>
-                        <div class="col-md-2">
-
-                        </div>
                   </form>
-
             </div>
       </div>
+      <div class="row justify-content-md-center" style="margin-top: 20px;">
+            <div class="col col-lg-4">
+                  <p><a href="{{ url_for('auth_signup') }}">Sign up</a></p>
+            </div>
+      </div>
+
 </div>
 {% endblock %}

@@ -55,11 +55,26 @@ $(document).ready(function () {
     //Append ingredient to list in form view
     $(function () {
         $('button[name="add_button"]').click(function () {
+            var name = $('#add_name').val();
             var amount = $('#add_amount').val();
-            if (Math.floor(amount) != amount || !($.isNumeric(amount))) {
+            var unit = $('#add_unit').val();
+            if (name == "") {
+                $('#alert-add').append($.fn.yellowAlert('Empty ingredient name.'));
                 return;
             }
-            var add = { id: $('#add_id').val(), name: $('#add_name').val(), amount: amount, unit: $('#add_unit').val() };
+            if (name.length > 144) {
+                $('#alert-add').append($.fn.yellowAlert('Ingredient name is too long.'));
+                return;
+            }
+            if (Math.floor(amount) != amount || !($.isNumeric(amount)) || amount < 1) {
+                $('#alert-add').append($.fn.yellowAlert('Amount is not a valid number.'));
+                return;
+            }
+            if (name.match(illegal) || unit.match(illegal)) {
+                $('#alert-add').append($.fn.yellowAlert('One field contains illegal characters.'));
+                return;
+            }
+            var add = { id: $('#add_id').val(), name: name, amount: amount, unit: unit };
             var entry = add['amount'] + ' ' + add['unit'] + ' ' + add['name'];
             var element = '<li class="ingredient">' +
                 '<input type="hidden" id="id" value="' + add['id'] + '">' +
@@ -100,14 +115,23 @@ $(document).ready(function () {
         var new_ingredients = [];
 
         //Validate recipe name and servings
-        if (recipe_name == '' || recipe_name.length < 3) {
-            $("#error").children().remove();
-            $("#error").append('<p><font color="red" size="1">Give your recipe a name of at least 2 characters.</font></p>');
+        if (recipe_name == '' || recipe_name.length < 2) {
+            $("#alert-create").children().remove();
+            $("#alert-create").append($.fn.yellowAlert('Give a name of at least 2 characters.'));
             return;
         }
-        if (servings < 1) {
-            $("#error").children().remove();
-            $("#error").append('<p><font color="red" size="1">Less than 1 servings?</font></p>');
+        if (recipe_name.length > 144) {
+            $("#alert-create").children().remove();
+            $("#alert-create").append($.fn.yellowAlert('Name is too long.'));
+            return;
+        }
+        if (servings < 1 || !$.isNumeric(servings)) {
+            $("#alert-create").children().remove();
+            $("#alert-create").append($.fn.yellowAlert('Invalid amount of servings'));
+            return;
+        }
+        if (recipe_name.match(illegal) || instructions.match(illegal)) {
+            $('#alert-create').append($.fn.yellowAlert('One field contains illegal characters.'));
             return;
         }
 
@@ -130,8 +154,8 @@ $(document).ready(function () {
 
         //Validate ingredient list
         if ($.isEmptyObject(ingredients)) {
-            $("#error").children().remove();
-            $("#error").append('<p><font color="red" size="1">Add at least one ingredient to your recipe.</font></p>');
+            $("#alert-create").children().remove();
+            $("#alert-create").append($.fn.yellowAlert('Add at least one ingredient.'));
             return;
         }
 
@@ -146,13 +170,18 @@ $(document).ready(function () {
             }),
             type: 'POST',
             success: function (response) {
-                $("#main_view").children().remove();
-                $("#main_view").append(response);
+                if (response == "OK") {
+                    $("#alert-create").children().remove();
+                    $("#alert-create").append($.fn.greenAlert('Changes saved!'));
+                } else {
+                    $("#main_view").children().remove();
+                    $("#main_view").append(response);
+                }
             },
             error: function (error) {
                 console.log(error);
                 $("#main_view").children().remove();
-                $("#main").append("<p>An error occurred</p>");
+                $("#main").append($.fn.redAlert(error));
             }
         });
     });
@@ -171,7 +200,6 @@ $(document).ready(function () {
         $("#add_unit").val("");
         $("#add_id").val("");
         $("#add_amount").val("");
-
     }
 
 });
