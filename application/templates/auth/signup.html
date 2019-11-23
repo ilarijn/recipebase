@@ -5,12 +5,14 @@
 <div class="container">
     <div class="row justify-content-md-center" style="margin-top: 0px;">
         {% for error in errors %}
+        {% for message in error[1] %}
         <div class="col-md-auto">
             <div class="alert alert-danger alert-dismissible fade show">
-                {{ error }}
+                {{ message }}
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         </div>
+        {% endfor %}
         {% endfor %}
     </div>
 
