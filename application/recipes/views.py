@@ -27,7 +27,7 @@ def recipes_search():
             account_id = current_user.id
         return render_template("recipes/search.html", results=results, account_id=account_id)
     else:
-        return render_template("recipes/search.html", results=[])
+        return render_template("recipes/search.html", results={})
 
 
 @app.route("/recipes/new/", methods=["GET"])

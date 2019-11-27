@@ -33,37 +33,62 @@ class Recipe(db.Model):
 
     @staticmethod
     def search_by_term(recipe, ingredient, category, term):
-        query = ("SELECT DISTINCT Recipe.name, Recipe.account_name, Recipe.id, Recipe.account_id FROM Recipe "
-                 "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
-                 "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
-                 "WHERE ")
 
-        r_query = "(LOWER(Recipe.name) LIKE LOWER(:term))"
-        i_query = "(LOWER(Ingredient.name) LIKE LOWER(:term))"
-        c_query = "(LOWER(Ingredient.category) LIKE LOWER(:term))"
         term = "%"+term+"%"
 
-        if recipe:
-            query += r_query
-        if ingredient and recipe:
-            query += " OR " + i_query
-            if category:
-                query += " OR " + c_query
-        elif ingredient:
-            query += i_query
-            if category:
-                query += " OR " + c_query
-        if recipe and category:
-            query += " OR " + c_query
-        elif category:
-            query += c_query
+        r_query = ("SELECT Recipe.id, Recipe.name, Recipe.account_id, Recipe.account_name FROM Recipe "
+                   "WHERE (LOWER(Recipe.name) LIKE LOWER(:term));")
+        i_query = ("SELECT Recipe.id, Recipe.name, Recipe.account_id, Recipe.account_name, Ingredient.name as ingredient FROM Recipe "
+                   "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
+                   "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id LEFT JOIN "
+                   "(SELECT Recipe.name, Recipe.id as id, COUNT(Recipe.id) as count FROM Recipe "
+                   "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
+                   "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
+                   "WHERE (LOWER(Ingredient.name) LIKE LOWER(:term)) GROUP BY Recipe.id) as matches ON matches.id = Recipe.id "
+                   "WHERE (LOWER(Ingredient.name) LIKE LOWER(:term)) ORDER BY matches.count DESC;")
+        c_query = ("SELECT Recipe.id, Recipe.name, Recipe.account_id, Recipe.account_name, Ingredient.category as category FROM Recipe "
+                   "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
+                   "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id LEFT JOIN "
+                   "(SELECT Recipe.name, Recipe.id as id, COUNT(Recipe.id) as count FROM Recipe "
+                   "LEFT JOIN Recipe_Ingredient ON Recipe_Ingredient.recipe_id = Recipe.id "
+                   "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
+                   "WHERE (LOWER(Ingredient.category) LIKE LOWER(:term)) GROUP BY Recipe.id ) as matches ON matches.id = Recipe.id "
+                   "WHERE (LOWER(Ingredient.category) LIKE LOWER(:term)) ORDER BY matches.count DESC;")
 
-        stmt = text(query).params(term=term)
-        res = db.engine.execute(stmt)
-        response = []
-        
-        for row in res:
-            response.append(
-                {"name": row[0], "account_name": row[1], "id": row[2], "account_id": row[3]})
+        response = {}
+
+        if ingredient:
+            stmt = text(i_query).params(term=term)
+            res = db.engine.execute(stmt)
+            prev_id = None
+            for row in res:
+                if row[0] != prev_id:
+                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 
+                    'account_name': row[3], 'ingredient_matches': [row[4]]}
+                    prev_id = row[0]
+                else:
+                    response[prev_id]['ingredient_matches'].append(row[4])
+           
+
+        if category:
+            stmt = text(c_query).params(term=term)
+            res = db.engine.execute(stmt)
+            prev_id = None
+            for row in res:
+                if not row[0] in response:
+                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 
+                    'account_name': row[3], 'category_matches': [row[4]]}
+                    prev_id = row[0]
+                elif row[0] != prev_id:
+                    response[row[0]]['category_matches'] = [row[4]]
+                else:
+                    response[prev_id]['category_matches'].append(row[4])
+
+        if recipe:
+            stmt = text(r_query).params(term=term)
+            res = db.engine.execute(stmt)
+            for row in res:
+                if not row[0] in response:
+                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 'account_name': row[3]}
 
         return response

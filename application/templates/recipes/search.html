@@ -9,7 +9,7 @@
     </div>
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
-            <form method="POST" action="{{ url_for('recipes_search') }}" id="sform">
+            <form method="POST" action="{{ url_for('recipes_search') }}" id="sform" style="margin-bottom: 40px;">
                 <div class="input-group">
                     <input class="col-12 form-control" type="text" name="search" id="stext" placeholder=""
                         aria-label="Search">
@@ -33,26 +33,48 @@
             </form>
         </div>
     </div>
-    <table>
-        {% for recipe in results %}
-        <tr>
-            <td><a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a> by
-                {{ recipe.account_name }}</td>
-            {% if current_user.is_authenticated and recipe.account_id == account_id %}
-            <td>
-                <form method="GET" action="{{ url_for('edit_recipe', recipe_id=recipe.id) }}">
-                    <input type="submit" value="Edit" />
-                </form>
-            </td>
-            <td>
-                <form method="POST" action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}">
-                    <input type="submit" value="Delete" />
-                </form>
-            </td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </table>
+
+    <div class="container">
+        <div class="row">
+            {% for id, contents in results.items() %}
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a
+                                href="{{ url_for('view_recipe', recipe_id=id) }}">{{ contents['name'] }}</a>
+                        </h5>
+                        <p class="card-text">added by {{ contents['account_name'] }}</p>
+                        {% if current_user.is_authenticated and contents['account_id'] == account_id %}
+                        <p class="card-text"><small class="text-muted">
+                                <a href="{{ url_for('edit_recipe', recipe_id=id) }}">Edit</a>
+                                &emsp;
+                                <a href="{{ url_for('delete_recipe', recipe_id=id) }}">Delete </a></p>
+                        </small>
+                        {% endif %}
+                        <p class="card-text">
+                            {% if 'ingredient_matches' in contents %}
+                            <small class="text-muted">
+                                Ingredients:
+                                {% for match in contents['ingredient_matches'] %}
+                                {{ match }}{{ "," if not loop.last }}
+                                {% endfor %}
+                            </small><br>
+                            {% endif %}
+                            {% if 'category_matches' in contents %}
+                            <small class="text-muted">
+                                Categories:
+                                {% for match in contents['category_matches'] %}
+                                {{ match }}{{ "," if not loop.last }}
+                                {% endfor %}
+                            </small>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='search.js') }}"></script>

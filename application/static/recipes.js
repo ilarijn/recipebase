@@ -130,11 +130,10 @@ $(document).ready(function () {
         }
 
         //Collect ingredients
-        var index = 0;
+        let index = 0;
         $("#added_ingredients li.ingredient").each(function () {
             obj = {};
             $(this).children('input').each(function () {
-                var attr = $(this).attr('id');
                 obj[$(this).attr('id')] = $(this).val();
             });
             obj['index'] = index++;
