@@ -17,7 +17,7 @@
     </div>
 
     <div class="row justify-content-md-center">
-        <div class="col col-lg-4">
+        <div class="col col-lg-4 form-user">
             <form method="POST" action="{{ url_for('auth_signup') }}">
                 <div class="form-label-group" style="margin-bottom: 10px; margin-top: 20px;">
                     {{ form.name.label }}
@@ -27,11 +27,11 @@
                     {{ form.username.label }}
                     {{ form.username(class="form-control") }}
                 </div>
-                <div class="form-label-group" style="margin-bottom: 10px;">
+                <div class="form-label-group">
                     {{ form.password.label }}
                     {{ form.password(class="form-control") }}
                 </div>
-                <button type="submit" class="btn btn-outline-primary" style="margin-top: 20px;">Sign up</button>
+                <button type="submit" class="btn btn-outline-primary btn-user">Sign up</button>
             </form>
         </div>
     </div>

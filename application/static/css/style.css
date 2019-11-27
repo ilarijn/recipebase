@@ -1,55 +1,18 @@
 /* General */
-
-
 :root {
-    --button-background-color: #024700;    
+    --theme-color: #324D31;    
   }
 
-.btn-primary {
-    background-color: var(--button-background-color) !important;
+main { 
+    padding-top: 50px;
+    margin-left: 50px;
+    padding-right: 50px; 
 }
-
-.btn-outline-primary {
-    color: var(--button-background-color) !important;
-    border-color: var(--button-background-color) !important;
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--button-background-color) !important;
-    color: white !important;
-}
-
-.btn-group {
-    margin: 5px;
-}
-
-.custom-checkbox .custom-control-input:checked~.custom-control-label::before,
-.custom-control-input:focus~custom-control-label::before,
-.custom-control-input:focus,
-.custom-control-input~.custom-control-indicator,
-.custom-control-input:focus~.custom-control-indicator
- {
-    background-color: #024700 !important;
-    box-shadow:none !important;
-    outline:0;
-  }
-
-.custom-checkbox {
-    margin: 5px 5px;
-  }
-
-.form-control:focus,
-.btn-outline-primary:focus {
-    border-color: #d6d6d6 !important;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(141, 141, 141, 0.5) !important;
-  }
-
-
 
 
 /* Navbar */
 .navbar-custom {
-    background-color: rgb(2, 71, 0);
+    background-color: var(--theme-color);
     border-color: #E7E7E7;
   }
 
@@ -72,8 +35,48 @@
 }
 
 
-/* Search view */
+/* Buttons and forms*/
+.btn-primary {
+    background-color: var(--theme-color) !important;
+}
 
+.btn-outline-primary {
+    color: var(--theme-color) !important;
+    border-color: var(--theme-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-color) !important;
+    color: white !important;
+}
+
+.btn-group {
+    margin: 5px;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before,
+.custom-control-input:focus~custom-control-label::before,
+.custom-control-input:focus,
+.custom-control-input~.custom-control-indicator,
+.custom-control-input:focus~.custom-control-indicator
+ {
+    background-color: var(--theme-color) !important;
+    box-shadow:none !important;
+    outline:0;
+  }
+
+.custom-checkbox {
+    margin: 5px 5px;
+  }
+
+.form-control:focus,
+.btn-outline-primary:focus {
+    border-color: #d6d6d6 !important;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(141, 141, 141, 0.5) !important;
+  }
+
+
+/* Search and list view */
 .btn span.glyphicon {    			
 	opacity: 0;				
 }
@@ -92,31 +95,28 @@
 
 
 /* Recipe creation form */
-
 li.ingredient {
     
     padding: 5px 0px;
 }
 
-main { 
-    padding-top: 50px;
-    margin-left: 50px;
-    padding-right: 50px; 
+
+/* User authorization forms */
+.form-user {
+    border: solid 2px; 
+    border-radius: 6px; 
+    padding-bottom: 20px; 
+    margin-top: 20px; 
+    border-color: rgb(195, 194, 194);
 }
 
-/* Error text */
-
-.error-text {
-    border-left: dotted 2px;
-    border-color: red;
-    padding: 5px;
-    font-size: medium;
+.btn-user {
+    margin-top: 40px; 
+    width: 100%;
 }
-
 
 
 /* Autocomplete */
-
 li.autocomplete {
     display: block;
     color: black;

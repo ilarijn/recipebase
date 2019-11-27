@@ -21,7 +21,7 @@
       </div>
 
       <div class="row justify-content-md-center">
-            <div class="col col-lg-4">
+            <div class="col col-lg-4 form-user">
                   <form method="POST" action="{{ url_for('auth_login') }}">
                         <div class="form-label-group" style="margin-bottom: 10px; margin-top: 20px;">
                               {{ form.username.label }}
@@ -31,15 +31,14 @@
                               {{ form.password.label }}
                               {{ form.password(class="form-control") }}
                         </div>
-                        <button type="submit" class="btn btn-outline-primary" style="margin-top: 20px;">Login</button>
+                        <button type="submit" class="btn btn-outline-primary btn-user">Login</button>
                   </form>
-            </div>
+             </div>
       </div>
       <div class="row justify-content-md-center" style="margin-top: 20px;">
             <div class="col col-lg-4">
                   <p><a href="{{ url_for('auth_signup') }}">Sign up</a> for an account.</p>
             </div>
       </div>
-
 </div>
 {% endblock %}
