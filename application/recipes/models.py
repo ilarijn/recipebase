@@ -75,7 +75,8 @@ class Recipe(db.Model):
             prev_id = None
             for row in res:
                 if row[0] == prev_id:
-                    response[prev_id]['category_matches'].append(row[4])
+                    if row[4] not in response[prev_id]['category_matches']:
+                        response[prev_id]['category_matches'].append(row[4])
                 elif not row[0] in response:
                     response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2],
                                         'account_name': row[3], 'category_matches': [row[4]]}
