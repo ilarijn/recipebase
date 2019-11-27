@@ -64,7 +64,6 @@ class Recipe(db.Model):
             for row in res:
                 if row[0] == prev_id:
                     response[prev_id]['ingredient_matches'].append(row[4])
-
                 else:
                     response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2],
                                         'account_name': row[3], 'ingredient_matches': [row[4]]}
@@ -83,6 +82,7 @@ class Recipe(db.Model):
                     prev_id = row[0]
                 else:
                     response[row[0]]['category_matches'] = [row[4]]
+                    prev_id = row[0]
 
         if recipe:
             stmt = text(r_query).params(term=term)
