@@ -16,43 +16,6 @@
         <td>{{ user.username }}</td>
         <td>{{ user.name }}</td>
         {% endfor %}
-
-
 </table>
 
-
-<form method="POST" action="{{ url_for('user_create_admin') }}">
-    <table>
-        <tr>
-            <td> {{ form.name.label }} </td>
-            <td> {{ form.name }} </td>
-        </tr>
-        <tr>
-            <td> {{ form.username.label }} </td>
-            <td> {{ form.username }} </td>
-            <td>
-                <ul>
-                    {% for error in form.username.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td> {{ form.password.label }} </td>
-            <td> {{ form.password }} </td>
-            <td>
-                <ul>
-                    {% for error in form.password.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"> <input type="submit" value="Create user" /> </td>
-        </tr>
-    </table>
-</form>
-<p>{{ db_error }} </p>
 {% endblock %}

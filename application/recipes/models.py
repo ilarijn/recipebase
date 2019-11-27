@@ -9,12 +9,14 @@ class RecipeIngredient(db.Model):
         'recipe.id'))
     ingredient_id = db.Column(db.Integer, db.ForeignKey(
         'ingredient.id'))
+
     amount = db.Column(db.Integer)
     unit = db.Column(db.String)
 
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     name = db.Column(db.String(144), nullable=False)
     instructions = db.Column(db.Text, nullable=True)
@@ -25,7 +27,6 @@ class Recipe(db.Model):
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                            nullable=False)
     account_name = db.Column(db.String)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __init__(self, name):
         self.name = name
@@ -37,9 +38,9 @@ class Recipe(db.Model):
                  "LEFT JOIN Ingredient ON Ingredient.id = Recipe_Ingredient.ingredient_id "
                  "WHERE ")
 
-        r_query = "(Recipe.name LIKE :term)"
-        i_query = "(Ingredient.name LIKE :term)"
-        c_query = "(Ingredient.category LIKE :term)"
+        r_query = "(LOWER(Recipe.name) LIKE LOWER(:term))"
+        i_query = "(LOWER(Ingredient.name) LIKE LOWER(:term))"
+        c_query = "(LOWER(Ingredient.category) LIKE LOWER(:term))"
         term = "%"+term+"%"
 
         if recipe:
@@ -60,6 +61,7 @@ class Recipe(db.Model):
         stmt = text(query).params(term=term)
         res = db.engine.execute(stmt)
         response = []
+        
         for row in res:
             response.append(
                 {"name": row[0], "account_name": row[1], "id": row[2], "account_id": row[3]})

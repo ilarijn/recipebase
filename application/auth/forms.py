@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, validators
+from application import db
+from application.auth.models import User
 
 
 class LoginForm(FlaskForm):
@@ -19,6 +21,11 @@ class UserForm(FlaskForm):
         validators.Regexp('^\w+$', message="Username can only contain alphanumeric characters.")])
     password = PasswordField("Password", [validators.Length(
         min=4, max=30, message="Password must be between 4 and 30 characters.")])
+
+    def validate_username(form, field):
+        user = User.query.filter_by(username=field.data).first()
+        if user:
+            raise validators.ValidationError("Username already exists.")
 
     class Meta:
         csrf = False
