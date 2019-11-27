@@ -62,33 +62,34 @@ class Recipe(db.Model):
             res = db.engine.execute(stmt)
             prev_id = None
             for row in res:
-                if row[0] != prev_id:
-                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 
-                    'account_name': row[3], 'ingredient_matches': [row[4]]}
-                    prev_id = row[0]
-                else:
+                if row[0] == prev_id:
                     response[prev_id]['ingredient_matches'].append(row[4])
-           
+
+                else:
+                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2],
+                                        'account_name': row[3], 'ingredient_matches': [row[4]]}
+                    prev_id = row[0]
 
         if category:
             stmt = text(c_query).params(term=term)
             res = db.engine.execute(stmt)
             prev_id = None
             for row in res:
-                if not row[0] in response:
-                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 
-                    'account_name': row[3], 'category_matches': [row[4]]}
-                    prev_id = row[0]
-                elif row[0] != prev_id:
-                    response[row[0]]['category_matches'] = [row[4]]
-                else:
+                if row[0] == prev_id:
                     response[prev_id]['category_matches'].append(row[4])
+                elif not row[0] in response:
+                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2],
+                                        'account_name': row[3], 'category_matches': [row[4]]}
+                    prev_id = row[0]
+                else:
+                    response[row[0]]['category_matches'] = [row[4]]
 
         if recipe:
             stmt = text(r_query).params(term=term)
             res = db.engine.execute(stmt)
             for row in res:
                 if not row[0] in response:
-                    response[row[0]] = {'id': row[0], 'name': row[1], 'account_id': row[2], 'account_name': row[3]}
+                    response[row[0]] = {
+                        'id': row[0], 'name': row[1], 'account_id': row[2], 'account_name': row[3]}
 
         return response
