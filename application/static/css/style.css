@@ -94,6 +94,26 @@ main {
  }
 
 
+ /* Recipe view */
+.col-ingredient,
+.col-instructions {
+    overflow-y: auto; 
+    height: 80vh; 
+    width: 100%; 
+    scrollbar-width: thin;
+   
+}
+
+.col-instructions {
+   padding: 0px 40px;
+}
+
+.p-instructions {
+    white-space: pre-wrap; 
+    margin-top: 60px;
+}
+
+
 /* Recipe creation form */
 li.ingredient {
     
