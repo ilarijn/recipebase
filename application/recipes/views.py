@@ -12,6 +12,7 @@ def recipes_index():
     account_id = ""
     if current_user.is_authenticated:
         account_id = current_user.id
+        
     return render_template("recipes/list.html",
                            recipes=Recipe.query.all(),
                            account_id=account_id)
@@ -25,12 +26,15 @@ def recipes_search():
             ingredient=request.form.get("ingredient"),
             category=request.form.get("category"),
             term=request.form.get("search"))
+
         account_id = ""
         if current_user.is_authenticated:
             account_id = current_user.id
+
         return render_template("recipes/search.html",
                                results=results,
                                account_id=account_id)
+
     else:
         return render_template("recipes/search.html", results={})
 
@@ -55,7 +59,7 @@ def recipes_create():
                                form_action=url_for("recipes_create"),
                                button_text="Create recipe")
 
-    recipe = Recipe(form.name.data)
+    recipe = Recipe(form.name.data.strip())
     recipe.servings = form.servings.data
     recipe.instructions = form.instructions.data
     recipe.account_id = current_user.id
@@ -102,11 +106,12 @@ def recipes_save(recipe_id):
     if not form.validate():
         return render_template("recipes/recipeform.html",
                                form=form,
-                               form_action=url_for("recipes_create"),
-                               button_text="Create recipe")
+                               form_action=url_for(
+                                   "recipes_save", recipe_id=recipe_id),
+                               button_text="Save changes")
 
     recipe = Recipe.query.get(recipe_id)
-    recipe.name = form.name.data
+    recipe.name = form.name.data.strip()
     recipe.servings = form.servings.data
     recipe.instructions = form.instructions.data
 
@@ -134,9 +139,11 @@ def recipes_view(recipe_id):
     r = Recipe.query.get(recipe_id)
     r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
     ingredients = link_amounts(r_i)
+
     account_id = ""
     if current_user.is_authenticated:
         account_id = current_user.id
+
     return render_template("recipes/view.html",
                            recipe=r,
                            ingredients=ingredients,
@@ -147,32 +154,49 @@ def recipes_view(recipe_id):
 @login_required
 def recipes_delete(recipe_id):
     r = Recipe.query.get(recipe_id)
+
     if r.account_id != current_user.id:
         abort(403)
+
     r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
     for item in r_i:
         db.session.delete(item)
+
     db.session.delete(r)
     db.session.commit()
+
     return redirect(url_for("recipes_index"))
 
 
 def create_ingredients(ingredients, recipe_id):
     new_ingredients = []
+
     for i in ingredients:
         ingredient_id = None
+
         if i['ingredient_id'] == None:
-            new = Ingredient(
-                name=i['ri_name'], unit=i['unit'])
-            db.session().add(new)
-            db.session().flush()
-            ingredient_id = new.id
-            new_ingredients.append(new)
+            existing_name = Ingredient.query.filter_by(
+                name=i['ri_name'].lower().strip()).first()
+
+            if existing_name:
+                ingredient_id = existing_name.id
+                i['ri_name'] = existing_name.name
+
+            else:
+                new = Ingredient(
+                    name=i['ri_name'].strip(), unit=i['unit'])
+                db.session().add(new)
+                db.session().flush()
+                ingredient_id = new.id
+                new_ingredients.append(new)
+
         else:
             ingredient_id = i['ingredient_id']
+
         ri = RecipeIngredient(
             recipe_id=recipe_id, ingredient_id=ingredient_id, amount=i['amount'], unit=i['unit'])
         db.session().add(ri)
+
     return new_ingredients
 
 

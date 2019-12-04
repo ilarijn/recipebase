@@ -1,20 +1,85 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <table>
-    <tr>
-      <th>Ingredient</th>
-      <th>Category</th>
-      <th>Unit</th>
-      <th>kcal per unit</th>
-    </tr>
-    {% for ingredient in ingredients %}
-    <tr>
-      <td>{{ ingredient.name }}</td>
-      <td>{{ ingredient.category }}</td>
-      <td>{{ ingredient.unit }}</td>
-      <td>{{ ingredient.kcal }}</td>
-    </tr>
-    {% endfor %}
-  </table>
+
+
+<div class="row justify-content-around">
+  <div class="col-7 col-ingredient-list">
+    <table class="table table-striped" id="ingredientList">
+      <thead>
+        <tr>
+          <th scope="col">Ingredient</th>
+          <th scope="col">Category</th>
+          <th scope="col">Unit</th>
+          <th scope="col">Kcal</th>
+        </tr>
+      </thead>
+      {% for ingredient in ingredients %}
+      <tr>
+        <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.name }}</td>
+        <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.category }}</td>
+        <td>{{ ingredient.unit }}</td>
+        <td>{{ ingredient.kcal }}</td>
+        <td style="max-width: 2em;">
+          <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
+            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+          </form>
+        </td>
+        <td style="max-width: 3em;">
+          <form method="GET" action="{{ url_for('ingredients_delete', ingredient_id=ingredient.id) }}">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="col-4 col-ingredient-add">
+    <h4>Add an ingredient</h4>
+    <div class="col col-lg-9 form-ingredient">
+      <form method="POST" action="{{ form_action }}">
+        <div class="form-label-group ingredient-input" style="margin-bottom: 10px;">
+          {{ form.name.label }}
+          {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-label-group ingredient-input">
+          {{ form.category.label }}
+          {{ form.category(class="form-control") }}
+        </div>
+        <div class="form-label-group ingredient-input">
+          {{ form.unit.label }}
+          {{ form.unit(class="form-control") }}
+        </div>
+        <div class="form-label-group ingredient-input">
+          {{ form.kcal.label }}
+          {{ form.kcal(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-outline-primary btn-ingredient">{{ button_text }}</button>
+      </form>
+    </div>
+
+    <div class="col col-lg-9" style="margin-top: 20px;">
+      {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+      {% for error in field_errors %}
+      <div class="col-md-auto">
+        <div class="alert alert-danger alert-dismissible fade show">
+          {{ error }}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+      {% if db_error %}
+      <div class="col-md-auto">
+        <div class="alert alert-danger alert-dismissible fade show">
+          {{ db_error }}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

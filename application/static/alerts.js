@@ -16,4 +16,4 @@ $.fn.redAlert = function (message) {
         '</div>'
 }
 
-var illegal = '\[<>/\\\\;()\]'
+var illegal = '\[<>/\\\\;\]'

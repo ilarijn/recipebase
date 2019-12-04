@@ -40,15 +40,11 @@
                 </div>
             </li>
             {% if current_user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                    Ingredients
-                </a>
-                <div class="dropdown-menu dropdown-menu-left">
-                    <a class="dropdown-item" href="{{ url_for('ingredients_form') }}">Add an ingredient</a>
-                    <a class="dropdown-item" href="{{ url_for('ingredients_index') }}">List ingredients</a>
-                </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('ingredients_index') }}">Ingredients</a>
             </li>
+
             {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -62,7 +58,8 @@
                 </div>
             </li>
             {% else %}
-            <li class="nav-item" style="border: solid 1px; border-color: rgba(255,255,255,.7); margin-right: 15px;"><a class="nav-link" href="{{ url_for('auth_signup') }}">Sign up</a></li>
+            <li class="nav-item" style="border: solid 1px; border-color: rgba(255,255,255,.7); margin-right: 15px;"><a
+                    class="nav-link" href="{{ url_for('auth_signup') }}">Sign up</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_login') }}">Login</a></li>
             {% endif %}
         </ul>

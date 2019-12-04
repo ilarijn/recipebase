@@ -40,6 +40,10 @@ main {
     background-color: var(--theme-color) !important;
 }
 
+.btn-primary:hover {
+    background-color: rgb(31, 47, 30) !important;
+}
+
 .btn-outline-primary {
     color: var(--theme-color) !important;
     border-color: var(--theme-color) !important;
@@ -123,6 +127,39 @@ li.ingredient {
 
 #ingredients label {
     display: none;
+}
+
+
+/* Ingredient list view */
+.col-ingredient-add,
+.col-ingredient-list
+ {
+    overflow-y: auto; 
+    height: 80vh; 
+    width: 100%; 
+    scrollbar-width: thin;
+   
+}
+
+.col-ingredient-add {
+    margin-left: 30px;
+}
+
+.form-ingredient {
+    border: dotted 2px; 
+    border-radius: 0px; 
+    padding-bottom: 20px; 
+    margin-top: 0px; 
+    border-color: rgb(195, 194, 194);
+}
+
+.ingredient-input {
+    margin-top: 10px;
+}
+
+.btn-ingredient {
+    margin-top: 20px; 
+    width: 100%;
 }
 
 
