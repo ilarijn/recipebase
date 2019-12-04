@@ -15,7 +15,7 @@ def ingredients_index():
 @app.route("/ingredients/new/", methods=["GET"])
 @login_required
 def ingredients_form():
-    return render_template("ingredients/new.html", form=IngredientForm(), multiform=MultiIngredientForm())
+    return render_template("ingredients/ingredientform.html", form=IngredientForm(), multiform=MultiIngredientForm())
 
 
 @app.route("/ingredients/", methods=["POST"])
@@ -23,7 +23,7 @@ def ingredients_form():
 def ingredients_create():
     form = IngredientForm(request.form)
     if not form.validate():
-        return render_template("ingredients/new.html", form=form)
+        return render_template("ingredients/ingredientform.html", form=form)
     i = Ingredient(name=form.name.data, category=form.category.data,
                    unit=form.unit.data)
     kcal = form.kcal.data

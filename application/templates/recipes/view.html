@@ -5,6 +5,13 @@
 <div class="row justify-content-around">
   <div class="col-3 col-ingredient">
     <h3>{{ recipe.name }}</h3>
+    {% if current_user.is_authenticated and recipe.account_id == account_id %}
+    <p class="card-text"><small class="text-muted">
+        <a href="{{ url_for('recipes_edit', recipe_id=recipe.id) }}">Edit</a>
+        &emsp;
+        <a href="{{ url_for('recipes_delete', recipe_id=recipe.id) }}">Delete </a></p>
+    </small>
+    {% endif %}
     <p>
       <font size="2">{{ recipe.date_created }}</font>
     </p>

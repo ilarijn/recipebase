@@ -5,7 +5,7 @@ from wtforms.widgets import TextArea, HiddenInput
 
 class RecipeIngredientForm(FlaskForm):
 
-    id = HiddenField()
+    ingredient_id = IntegerField(widget=HiddenInput(), validators=[validators.Optional()])
     ri_name = StringField(widget=HiddenInput(),
                           validators=[validators.Length(min=2)])
     amount = IntegerField(widget=HiddenInput(), validators = [validators.NumberRange(min=1, max=100000)])

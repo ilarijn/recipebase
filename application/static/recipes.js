@@ -43,6 +43,7 @@ $(document).ready(function () {
                     .appendTo(ul);
             };
         $.ui.autocomplete.filter = function (array, term) {
+            term = term.toLowerCase();
             var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
             return $.grep(array, function (value) {
                 return matcher.test(value.name);
@@ -82,7 +83,7 @@ $(document).ready(function () {
             var add = { id: $('#add_id').val(), name: name, amount: amount, unit: unit };
             var entry = add['amount'] + ' ' + add['unit'] + ' ' + add['name'];
             var element = '<li class="ingredient">' +
-                '<input type="hidden" id="id" name="ingredients-'+ (ingredients_index) + '-id" value="' + add['id'] + '">' +
+                '<input type="hidden" id="id" name="ingredients-'+ (ingredients_index) + '-ingredient_id" value="' + add['id'] + '">' +
                 '<input type="hidden" id="ri_name" name="ingredients-'+ (ingredients_index) + '-ri_name" value="' + add['name'] + '">' +
                 '<input type="hidden" id="amount" name="ingredients-'+ (ingredients_index) + '-amount" value="' + add['amount'] + '">' +
                 '<input type="hidden" id="unit" name="ingredients-'+ (ingredients_index) + '-unit" value="' + add['unit'] + '">' +

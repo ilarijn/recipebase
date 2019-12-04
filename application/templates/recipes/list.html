@@ -9,14 +9,14 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">
-            <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a>
+            <a href="{{ url_for('recipes_view', recipe_id=recipe.id) }}">{{ recipe.name }}</a>
           </h5>
           <p class="card-text">added by {{ recipe.account_name }}</p>
           {% if current_user.is_authenticated and recipe.account_id == account_id %}
           <p class="card-text"><small class="text-muted">
-              <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}">Edit</a>
+              <a href="{{ url_for('recipes_edit', recipe_id=recipe.id) }}">Edit</a>
               &emsp;
-              <a href="{{ url_for('delete_recipe', recipe_id=recipe.id) }}">Delete </a></p>
+              <a href="{{ url_for('recipes_delete', recipe_id=recipe.id) }}">Delete </a></p>
           </small>
           {% endif %}
         </div>

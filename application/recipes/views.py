@@ -12,7 +12,9 @@ def recipes_index():
     account_id = ""
     if current_user.is_authenticated:
         account_id = current_user.id
-    return render_template("recipes/list.html", recipes=Recipe.query.all(), account_id=account_id)
+    return render_template("recipes/list.html",
+                           recipes=Recipe.query.all(),
+                           account_id=account_id)
 
 
 @app.route("/recipes/search/", methods=["GET", "POST"])
@@ -20,14 +22,15 @@ def recipes_search():
     if request.method == 'POST':
         results = Recipe.search_by_term(
             recipe=request.form.get("recipe"),
-            ingredient=request.form.get(
-                "ingredient"),
+            ingredient=request.form.get("ingredient"),
             category=request.form.get("category"),
             term=request.form.get("search"))
         account_id = ""
         if current_user.is_authenticated:
             account_id = current_user.id
-        return render_template("recipes/search.html", results=results, account_id=account_id)
+        return render_template("recipes/search.html",
+                               results=results,
+                               account_id=account_id)
     else:
         return render_template("recipes/search.html", results={})
 
@@ -35,15 +38,23 @@ def recipes_search():
 @app.route("/recipes/new/", methods=["GET"])
 @login_required
 def recipes_form():
-    return render_template("recipes/new.html", form=RecipeForm())
+    return render_template("recipes/recipeform.html",
+                           form=RecipeForm(),
+                           form_action=url_for("recipes_create"),
+                           button_text="Create recipe")
 
 
 @app.route("/recipes/create/test", methods=["POST"])
 @login_required
 def recipes_create():
     form = RecipeForm(request.form)
+
     if not form.validate():
-        return render_template("recipes/new.html", form=form)
+        return render_template("recipes/recipeform.html",
+                               form=form,
+                               form_action=url_for("recipes_create"),
+                               button_text="Create recipe")
+
     recipe = Recipe(form.name.data)
     recipe.servings = form.servings.data
     recipe.instructions = form.instructions.data
@@ -56,68 +67,53 @@ def recipes_create():
     db.session().flush()
 
     new = create_ingredients(ingredients, recipe.id)
-    print(new)
 
     db.session().commit()
 
-    return redirect(url_for("recipes_index"))
-
-
-@app.route("/recipes/create/", methods=["POST"])
-def create_recipe():
-    if current_user.is_authenticated:
-        data = request.get_json()
-        name = data['name']
-        instructions = data['instructions']
-        servings = data['servings']
-        ingredients = data['ingredients']
-
-        r = Recipe(name)
-        r.instructions = instructions
-        r.servings = servings
-        r.account_id = current_user.id
-        r.account_name = current_user.name
-
-        db.session().add(r)
-        db.session().flush()
-
-        new = create_ingredients(ingredients, r.id)
-
-        db.session.commit()
-
-        if new:
-            return render_template("recipes/add_new.html", ingredients=new)
-        else:
-            return "<p>Recipe created!</p>"
-    else:
-        abort(400)
+    return redirect(url_for("recipes_view", recipe_id=recipe.id))
 
 
 @app.route("/recipes/<recipe_id>/edit", methods=["GET"])
 @login_required
-def edit_recipe(recipe_id):
-    r = Recipe.query.get(recipe_id)
-    if r.account_id != current_user.id:
+def recipes_edit(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+
+    if recipe.account_id != current_user.id:
         abort(403)
-    r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
-    ingredients = link_amounts(r_i)
-    print(ingredients)
-    return render_template("recipes/edit.html", recipe=r, ingredients=ingredients)
+
+    form = RecipeForm(obj=recipe)
+
+    for ri_form in form.ingredients:
+        ingredient = Ingredient.query.get(ri_form.ingredient_id.data)
+        ri_form.ri_name.data = ingredient.name
+
+    return render_template("recipes/recipeform.html",
+                           form=form,
+                           form_action=url_for(
+                               "recipes_save", recipe_id=recipe.id),
+                           button_text="Save changes")
 
 
 @app.route("/recipes/<recipe_id>/save/", methods=["POST"])
 @login_required
-def save_changes(recipe_id):
-    data = request.get_json()
-    r = Recipe.query.get(recipe_id)
-    if r.account_id != current_user.id:
-        abort(403)
-    r.name = data['name']
-    r.instructions = data['instructions']
-    r.servings = data['servings']
-    ingredients = data['ingredients']
+def recipes_save(recipe_id):
+    form = RecipeForm(request.form)
 
-    id_list = {item['id']: item['amount'] for item in ingredients}
+    if not form.validate():
+        return render_template("recipes/recipeform.html",
+                               form=form,
+                               form_action=url_for("recipes_create"),
+                               button_text="Create recipe")
+
+    recipe = Recipe.query.get(recipe_id)
+    recipe.name = form.name.data
+    recipe.servings = form.servings.data
+    recipe.instructions = form.instructions.data
+
+    ingredients = form.ingredients
+
+    id_list = {
+        ri_form.ingredient_id.data: ri_form.amount.data for ri_form in ingredients}
     ri_list = RecipeIngredient.query.filter_by(recipe_id=recipe_id).all()
 
     for ingredient in ri_list:
@@ -127,23 +123,29 @@ def save_changes(recipe_id):
             ingredient.amount = id_list.pop(str(ingredient.ingredient_id))
 
     create_ingredients(
-        [item for item in ingredients if item['id'] in id_list], r.id)
+        [item for item in form.ingredients.data if item['ingredient_id'] in id_list], recipe.id)
 
     db.session.commit()
-    return "OK"
+    return redirect(url_for("recipes_view", recipe_id=recipe.id))
 
 
 @app.route("/recipes/<recipe_id>/", methods=["GET"])
-def view_recipe(recipe_id):
+def recipes_view(recipe_id):
     r = Recipe.query.get(recipe_id)
     r_i = RecipeIngredient.query.filter_by(recipe_id=r.id).all()
     ingredients = link_amounts(r_i)
-    return render_template("recipes/view.html", recipe=r, ingredients=ingredients)
+    account_id = ""
+    if current_user.is_authenticated:
+        account_id = current_user.id
+    return render_template("recipes/view.html",
+                           recipe=r,
+                           ingredients=ingredients,
+                           account_id=account_id)
 
 
-@app.route("/recipes/<recipe_id>/delete", methods=["POST"])
+@app.route("/recipes/<recipe_id>/delete", methods=["GET"])
 @login_required
-def delete_recipe(recipe_id):
+def recipes_delete(recipe_id):
     r = Recipe.query.get(recipe_id)
     if r.account_id != current_user.id:
         abort(403)
@@ -159,7 +161,7 @@ def create_ingredients(ingredients, recipe_id):
     new_ingredients = []
     for i in ingredients:
         ingredient_id = None
-        if i['id'] == "":
+        if i['ingredient_id'] == None:
             new = Ingredient(
                 name=i['ri_name'], unit=i['unit'])
             db.session().add(new)
@@ -167,7 +169,7 @@ def create_ingredients(ingredients, recipe_id):
             ingredient_id = new.id
             new_ingredients.append(new)
         else:
-            ingredient_id = i['id']
+            ingredient_id = i['ingredient_id']
         ri = RecipeIngredient(
             recipe_id=recipe_id, ingredient_id=ingredient_id, amount=i['amount'], unit=i['unit'])
         db.session().add(ri)
