@@ -1,5 +1,5 @@
 from application import app, db
-from flask import render_template, request, redirect, url_for, json, jsonify
+from flask import render_template, request, redirect, url_for, json, jsonify, abort
 from flask_login import login_required, current_user
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -16,28 +16,33 @@ def ingredients_index():
                                func.lower(Ingredient.name)).all(),
                            form=IngredientForm(),
                            form_action=url_for("ingredients_create"),
-                           button_text="Add Ingredient")
+                           button_text="Add",
+                           account_id=current_user.id)
 
 
 @app.route("/ingredients/<ingredient_id>/edit", methods=["GET"])
 @login_required
 def ingredients_edit(ingredient_id):
     ingredient = Ingredient.query.get(ingredient_id)
+    if ingredient.account_id != current_user.id:
+        abort(403)
     form = IngredientForm(obj=ingredient)
-
     return render_template("ingredients/list.html",
                            ingredients=Ingredient.query.order_by(
                                func.lower(Ingredient.name)).all(),
                            form=form,
                            form_action=url_for(
                                "ingredients_save", ingredient_id=ingredient_id),
-                           button_text="Save Changes")
+                           button_text="Save changes",
+                           account_id=current_user.id)
 
 
 @app.route("/ingredients/<ingredient_id>/edit/", methods=["POST"])
 @login_required
 def ingredients_save(ingredient_id):
     ingredient = Ingredient.query.get(ingredient_id)
+    if ingredient.account_id != current_user.id:
+        abort(403)
     form = IngredientForm(request.form, obj=ingredient)
     if not form.validate():
         return render_template("ingredients/list.html",
@@ -46,7 +51,8 @@ def ingredients_save(ingredient_id):
                                form=form,
                                form_action=url_for(
                                    "ingredients_save", ingredient_id=ingredient_id),
-                               button_text="Save Changes")
+                               button_text="Save changes",
+                               account_id=current_user.id)
     form.populate_obj(ingredient)
     try:
         db.session().commit()
@@ -60,7 +66,8 @@ def ingredients_save(ingredient_id):
                                form_action=url_for(
                                    "ingredients_save", ingredient_id=ingredient_id),
                                db_error="Ingredient name already exists.",
-                               button_text="Save Changes")
+                               button_text="Save changes",
+                               account_id=current_user.id)
 
 
 @app.route("/ingredients/", methods=["POST"])
@@ -72,10 +79,11 @@ def ingredients_create():
                                ingredients=Ingredient.query.all(),
                                form=form,
                                form_action=url_for("ingredients_create"),
-                               button_text="Add Ingredient")
+                               button_text="Add",
+                               account_id=current_user.id)
 
     i = Ingredient(name=form.name.data, category=form.category.data,
-                   unit=form.unit.data)
+                   unit=form.unit.data, account_id=current_user.id)
     kcal = form.kcal.data
     i.kcal = kcal
     try:
@@ -91,13 +99,16 @@ def ingredients_create():
                                form_action=url_for(
                                    "ingredients_create"),
                                db_error="Ingredient name already exists.",
-                               button_text="Add Ingredient")
+                               button_text="Add",
+                               account_id=current_user.id)
 
 
 @app.route("/ingredients/<ingredient_id>/delete", methods=["GET"])
 @login_required
 def ingredients_delete(ingredient_id):
     i = Ingredient.query.get(ingredient_id)
+    if i.account_id != current_user.id:
+        abort(403)
     r_i = RecipeIngredient.query.filter_by(ingredient_id=i.id).all()
     if r_i:
         return render_template("ingredients/list.html",
@@ -107,7 +118,8 @@ def ingredients_delete(ingredient_id):
                                form_action=url_for(
                                    "ingredients_create"),
                                db_error="Ingredient is used in a recipe.",
-                               button_text="Add Ingredient")
+                               button_text="Add",
+                               account_id=current_user.id)
     else:
         db.session.delete(i)
         db.session.commit()

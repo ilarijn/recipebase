@@ -20,6 +20,7 @@
         <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.category }}</td>
         <td>{{ ingredient.unit }}</td>
         <td>{{ ingredient.kcal }}</td>
+        {% if current_user.is_authenticated and ingredient.account_id == account_id %}
         <td style="max-width: 2em;">
           <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
             <button type="submit" class="btn btn-primary btn-sm">Edit</button>
@@ -30,6 +31,7 @@
             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
           </form>
         </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>

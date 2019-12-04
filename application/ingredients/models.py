@@ -8,6 +8,9 @@ class Ingredient(db.Model):
     category = db.Column(db.String(100), nullable=True)
     unit = db.Column(db.String(20), nullable=True)
     kcal = db.Column(db.Integer)
+
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
+                           nullable=False)
    
     def __hash__(self):
         return hash((self.name, self.id))

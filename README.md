@@ -25,8 +25,8 @@ Kcal values for ingredients and time for recipes exist in the db but are not uti
 [Current database diagram](documentation/current_diagram.png)
 
 #### Todo
-- Search query that also returns all ingredients and categories matched without duplicate recipe name rows
-- Edit ingredients
+- Maybe not make ingredient names unique and make all ingredients user-specific 
+- Recipe tags
 
 
 

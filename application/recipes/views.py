@@ -12,7 +12,7 @@ def recipes_index():
     account_id = ""
     if current_user.is_authenticated:
         account_id = current_user.id
-        
+
     return render_template("recipes/list.html",
                            recipes=Recipe.query.all(),
                            account_id=account_id)
@@ -184,7 +184,7 @@ def create_ingredients(ingredients, recipe_id):
 
             else:
                 new = Ingredient(
-                    name=i['ri_name'].strip(), unit=i['unit'])
+                    name=i['ri_name'].strip(), unit=i['unit'], account_id=current_user.id)
                 db.session().add(new)
                 db.session().flush()
                 ingredient_id = new.id
