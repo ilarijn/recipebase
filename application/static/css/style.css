@@ -121,6 +121,10 @@ li.ingredient {
     padding: 5px 0px;
 }
 
+#ingredients label {
+    display: none;
+}
+
 
 /* User authorization forms */
 .form-user {

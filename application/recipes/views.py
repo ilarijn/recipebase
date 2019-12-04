@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from application import app, db
 from application.ingredients.models import Ingredient
 from application.recipes.models import Recipe, RecipeIngredient
+from application.recipes.forms import RecipeForm, RecipeIngredientForm
 
 
 @app.route("/recipes/", methods=["GET"])
@@ -17,11 +18,12 @@ def recipes_index():
 @app.route("/recipes/search/", methods=["GET", "POST"])
 def recipes_search():
     if request.method == 'POST':
-        results = Recipe.search_by_term(recipe=request.form.get("recipe"),
-                                        ingredient=request.form.get(
-                                            "ingredient"),
-                                        category=request.form.get("category"),
-                                        term=request.form.get("search"))
+        results = Recipe.search_by_term(
+            recipe=request.form.get("recipe"),
+            ingredient=request.form.get(
+                "ingredient"),
+            category=request.form.get("category"),
+            term=request.form.get("search"))
         account_id = ""
         if current_user.is_authenticated:
             account_id = current_user.id
@@ -32,8 +34,33 @@ def recipes_search():
 
 @app.route("/recipes/new/", methods=["GET"])
 @login_required
-def recipe_form():
-    return render_template("recipes/new.html")
+def recipes_form():
+    return render_template("recipes/new.html", form=RecipeForm())
+
+
+@app.route("/recipes/create/test", methods=["POST"])
+@login_required
+def recipes_create():
+    form = RecipeForm(request.form)
+    if not form.validate():
+        return render_template("recipes/new.html", form=form)
+    recipe = Recipe(form.name.data)
+    recipe.servings = form.servings.data
+    recipe.instructions = form.instructions.data
+    recipe.account_id = current_user.id
+    recipe.account_name = current_user.name
+
+    ingredients = form.ingredients.data
+
+    db.session().add(recipe)
+    db.session().flush()
+
+    new = create_ingredients(ingredients, recipe.id)
+    print(new)
+
+    db.session().commit()
+
+    return redirect(url_for("recipes_index"))
 
 
 @app.route("/recipes/create/", methods=["POST"])
@@ -134,9 +161,7 @@ def create_ingredients(ingredients, recipe_id):
         ingredient_id = None
         if i['id'] == "":
             new = Ingredient(
-                name=i['name'], unit=i['unit'], category=i['category'])
-            if i['kcal'] != "":
-                new.kcal = int(i['kcal'])
+                name=i['ri_name'], unit=i['unit'])
             db.session().add(new)
             db.session().flush()
             ingredient_id = new.id

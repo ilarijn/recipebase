@@ -3,64 +3,92 @@
 {% block body %}
 
 <div id="main_view">
-    <div class="row justify-content-around">
 
-        <div class="col-5">
-            <div class="form-group row">
-                <div class="col-9">
-                    <label for="namefield">Recipe name</label>
-                    <input type="text" class="form-control" id="namefield">
-                </div>
-                <div class="col-3">
-                    <label for="servings">Servings</label>
-                    <input type="number" class="form-control" id="servingsfield" value="2">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="instrfield">Instructions</label>
-                <textarea id="instrfield" class="form-control" rows="12"></textarea>
-            </div>
-            <div class="form-group row">
-                <div class="col-3">
-                    <button name="create_button" type="button" class="btn btn-outline-primary">Create
-                        recipe</button>
-                </div>
-                <div class="col-9" id="alert-create">
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-6">
-            <div class="form-row" style="margin-bottom: 50px;">
-                <input type="hidden" id="add_id">
-                <div class="col-6">
-                    <label for="name">Ingredient</label>
-                    <input type="text" class="form-control" id="add_name">
-                </div>
-                <div class="col-2">
-                    <label for="amount">Amount</label>
-                    <input type="number" class="form-control" id="add_amount">
-                </div>
-                <div class="col-2">
-                    <label for="unit">Unit</label>
-                    <input type="text" class="form-control" id="add_unit">
-                </div>
-                <div class="col-1">
-                    <label>&nbsp;</label>
-                    <button name="add_button" type="button" class="btn btn-outline-primary">Add</button>
-                </div>
-                <div class="col-10" id="alert-add" style="margin-top: 10px;">
-                </div>
-            </div>
-            <div>
-                <ul class="list-unstyled" id="added_ingredients">
-
-                </ul>
+    <div class="row justify-content-md-center" style="margin-top: 0px;">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+        {% for error in field_errors %}
+        <div class="col-md-auto">
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{ error }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         </div>
+        {% endfor %}
+        {% endfor %}
     </div>
+
+
+    <form method="POST" action="{{ url_for('recipes_create') }}">
+        <div class="row justify-content-around">
+            <div class="col-5">
+                <div class="form-group row">
+                    <div class="col-9">
+                        {{ form.name.label }}
+                        {{ form.name(class_="form-control") }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.servings.label }}
+                        {{ form.servings(class_="form-control", type="number", value="2") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.instructions.label }}
+                    {{ form.instructions(class_="form-control", rows="12") }}</textarea>
+                </div>
+                <div class="form-group row">
+                    <div class="col-3">
+                        <button name="create_button" type="submit" class="btn btn-outline-primary">Create
+                            recipe</button>
+                    </div>
+                    <div class="col-9" id="alert-create">
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-6">
+                <div class="form-group row" style="margin-bottom: 50px;">
+                    <input type="hidden" id="add_id">
+                    <div class="col-6">
+                        <label for="name">Ingredient</label>
+                        <input type="text" class="form-control" id="add_name">
+                    </div>
+                    <div class="col-2">
+                        <label for="amount">Amount</label>
+                        <input type="number" class="form-control" id="add_amount">
+                    </div>
+                    <div class="col-2">
+                        <label for="unit">Unit</label>
+                        <input type="text" class="form-control" id="add_unit">
+                    </div>
+                    <div class="col-1">
+                        <label>&nbsp;</label>
+                        <button name="add_button" type="button" class="btn btn-outline-primary">Add</button>
+                    </div>
+                    <div class="col-10" id="alert-add" style="margin-top: 10px;">
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" id="ingredients_size" value="{{ form.ingredients|length }}">
+                    <ul class="list-unstyled" id="ingredients">
+                        {% for ingredient in form.ingredients %}
+                        <li class="ingredient">
+                        {{ ingredient.amount }} 
+                        {{ ingredient.unit }} 
+                        {{ ingredient.ri_name }}
+                        <div class="col-11">{{ ingredient.amount.data }} {{ ingredient.unit.data }} {{ ingredient.ri_name.data }}
+                            <button type="button" name="remove_button" class="close" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='recipes.js') }}"></script>

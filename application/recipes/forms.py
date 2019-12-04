@@ -1,19 +1,19 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FieldList, FormField, HiddenField, validators
-from wtforms.widgets import TextArea
+from wtforms.widgets import TextArea, HiddenInput
 
 
 class RecipeIngredientForm(FlaskForm):
 
-    id = HiddenField([validators.Regexp("[0-9]", message="Invalid ingredient id.")])
-    name = StringField("Ingredient", [validators.Length(min=2)])
-    unit = StringField("Unit", [validators.Length(max=10)])
+    id = HiddenField()
+    ri_name = StringField(widget=HiddenInput(),
+                          validators=[validators.Length(min=2)])
+    amount = IntegerField(widget=HiddenInput(), validators = [validators.NumberRange(min=1, max=100000)])
+    unit = StringField(widget=HiddenInput(), validators=[validators.Length(
+        max=10, message="Unit name is too long.")])
 
-
-class MultiIngredientForm(FlaskForm):
-
-    list_name = StringField("List name")
-    ingredients = FieldList(FormField(RecipeIngredientForm), min_entries=1)
+    class Meta:
+        csrf = False
 
 
 class RecipeForm(FlaskForm):
@@ -23,3 +23,12 @@ class RecipeForm(FlaskForm):
     servings = IntegerField("Servings", [validators.NumberRange(
         min=1, max=100000, message="Invalid amount of servings.")])
     instructions = StringField("Instructions", widget=TextArea())
+    ingredients = FieldList(FormField(RecipeIngredientForm))
+
+    def validate_ingredients(form, field):
+        ingredients = form.ingredients.data
+        if not ingredients:
+            raise validators.ValidationError("Add at least one ingredient.")
+
+    class Meta:
+        csrf = False
