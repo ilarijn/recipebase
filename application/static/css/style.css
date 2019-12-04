@@ -105,7 +105,8 @@ main {
 }
 
 .col-instructions {
-   padding: 0px 40px;
+   padding-left: 100px;
+   padding-right: 60px;
 }
 
 .p-instructions {

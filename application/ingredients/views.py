@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, json, jsonify
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from application.ingredients.models import Ingredient
-from application.ingredients.forms import IngredientForm
+from application.ingredients.forms import IngredientForm, RecipeIngredientForm, MultiIngredientForm
 
 
 @app.route("/ingredients/", methods=["GET"])
@@ -15,7 +15,7 @@ def ingredients_index():
 @app.route("/ingredients/new/", methods=["GET"])
 @login_required
 def ingredients_form():
-    return render_template("ingredients/new.html", form=IngredientForm())
+    return render_template("ingredients/new.html", form=IngredientForm(), multiform=MultiIngredientForm())
 
 
 @app.route("/ingredients/", methods=["POST"])

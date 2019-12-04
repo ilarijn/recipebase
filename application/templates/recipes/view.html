@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<div class="row justify-content-between">
+<div class="row justify-content-around">
   <div class="col-3 col-ingredient">
     <h3>{{ recipe.name }}</h3>
     <p>
@@ -17,7 +17,7 @@
       {% endfor %}
     </table>
   </div>
-  <div class="col-9 col-instructions">
+  <div class="col-8 col-instructions">
     <p class="p-instructions">{{ recipe.instructions }}</p>
   </div>
 </div>
