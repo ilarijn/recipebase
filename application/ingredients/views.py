@@ -18,6 +18,7 @@ def ingredients_index():
                            form=IngredientForm(),
                            form_action=url_for("ingredients_create"),
                            button_text="Add",
+                           action="Add an ingredient",
                            account_id=current_user.id)
 
 
@@ -35,6 +36,7 @@ def ingredients_edit(ingredient_id):
                            form=form,
                            form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                            button_text="Save changes",
+                           action="Edit an ingredient",
                            account_id=current_user.id)
 
 
@@ -56,6 +58,7 @@ def ingredients_save(ingredient_id):
                                form=form,
                                form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                button_text="Save changes",
+                               action="Edit an ingredient",
                                account_id=current_user.id)
 
     form.populate_obj(ingredient)
@@ -74,6 +77,7 @@ def ingredients_save(ingredient_id):
                                form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                db_error="Ingredient name already exists.",
                                button_text="Save changes",
+                               action="Edit an ingredient",
                                account_id=current_user.id)
 
 
@@ -90,6 +94,7 @@ def ingredients_create():
                                form=form,
                                form_action=url_for("ingredients_create"),
                                button_text="Add",
+                               action="Add an ingredient",
                                account_id=current_user.id)
 
     i = Ingredient(name=form.name.data, category=form.category.data,
@@ -112,6 +117,7 @@ def ingredients_create():
                                form_action=url_for("ingredients_create"),
                                db_error="Ingredient name already exists.",
                                button_text="Add",
+                               action="Add an ingredient",
                                account_id=current_user.id)
 
 
@@ -134,6 +140,7 @@ def ingredients_delete(ingredient_id):
                                form_action=url_for("ingredients_create"),
                                db_error="Ingredient is used in a recipe.",
                                button_text="Add",
+                               action="Add an ingredient",
                                account_id=current_user.id)
     else:
         db.session.delete(i)

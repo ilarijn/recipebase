@@ -15,19 +15,52 @@
     <p>
       <font size="2">{{ recipe.date_created }}</font>
     </p>
-    <p>Servings: {{ recipe.servings }}</p>
+    <p>Servings:
+      <input type="number" min="1" , value="{{ recipe.servings }}" style="max-width: 4em;" id="servings_counter">
+    </p>
     <table style="margin-top: 30px;">
       {% for ingredient in ingredients %}
-      <tr>
-        <td>{{ (ingredient['amount']|string).rstrip('0').rstrip('.') }} {{ ingredient['unit'] }} {{ ingredient['name'] }}</td>
+      <tr class="ingredient_row">
+        <td>
+          <input type="hidden" id="amount_value" value="{{ ingredient['amount'] }}">
+          <input type="hidden" id="unit_value" value="{{ ingredient['unit'] }}">
+          <input type="hidden" id="name_value" value="{{ ingredient['name'] }}">
+        </td>
+        <td id="ingredient_text">{{ (ingredient['amount']|string).rstrip('0').rstrip('.') }} {{ ingredient['unit'] }}
+          {{ ingredient['name'] }}</td>
       </tr>
       {% endfor %}
     </table>
   </div>
-  <div class="col-8 col-instructions">
+  <div class=" col-8 col-instructions">
     <p class="p-instructions">{{ recipe.instructions }}</p>
   </div>
 </div>
 
-{% endblock %}
+<script type="text/javascript">
 
+  $(document).ready(function () {
+
+    var counter = $("#servings_counter");
+    var previousServings = counter.val();
+
+    $("#servings_counter").on("input", function () {
+      var currentServings = counter.val();
+
+      $('.ingredient_row').each(function () {
+        let store = $(this).find("#amount_value");
+
+        let newAmount = store.val() / previousServings * currentServings;
+        let newText = newAmount.toString() + ' ' + $(this).find("#unit_value").val() + ' ' + $(this).find("#name_value").val();
+
+        $(this).find("#ingredient_text").text(newText);
+        store.val(newAmount);
+      });
+      previousServings = currentServings;
+
+    });
+  });
+
+</script>
+
+{% endblock %}

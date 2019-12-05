@@ -13,6 +13,7 @@
           <th scope="col">Unit</th>
           <th scope="col">Kcal</th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -22,13 +23,20 @@
           <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.category }}</td>
           <td>{{ ingredient.unit }}</td>
           <td>{{ (ingredient.kcal|string).rstrip('0').rstrip('.') }}</td>
-
           {% if current_user.is_authenticated and ingredient.account_id == account_id %}
-          <td style="max-width: 3em;" align="center">
-            <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
-              <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
-            </form>
-          </td>
+          <div class="btn-group">
+            <td style="max-width: 2em;">
+              <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
+                <button type="submit" class="btn btn-outline-primary btn-sm"
+                  style="width: 3em;">Edit</button>
+              </form>
+            </td>
+            <td style="max-width: 2em;">
+              <form method="GET" action="{{ url_for('ingredients_delete', ingredient_id=ingredient.id) }}">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </div>
           {% endif %}
         </tr>
         {% endfor %}
@@ -37,7 +45,7 @@
   </div>
 
   <div class="col-4 col-ingredient-add">
-    <h4>Add an ingredient</h4>
+    <h4>{{ action }}</h4>
     <div class="col col-lg-10 form-ingredient">
       <form method="POST" action="{{ form_action }}">
         <div class="form-label-group ingredient-input" style="margin-bottom: 10px;">
@@ -90,7 +98,7 @@
     $('#ingredientList').DataTable({
       'columnDefs': [
         {
-          'targets': [4, 4], /* column index */
+          'targets': [4, 5], /* column index */
           'orderable': false
         }
       ]

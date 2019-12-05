@@ -53,7 +53,6 @@ $(document).ready(function () {
 
     //Append ingredient to list in form view
     var ingredients_index = $('#ingredients_size').val();
-    console.log("ingredients_index: " + ingredients_index);
     $(function () {
         $('button[name="add_button"]').click(function () {
             var name = $('#add_name').val();
@@ -99,7 +98,7 @@ $(document).ready(function () {
         })
     });
 
-    //Add ingredient instead of form submit when focus is on related field
+    //Add ingredient instead of form submit on press enter when focus is on related field
     $('#recipe_form').on('keypress', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
@@ -108,6 +107,7 @@ $(document).ready(function () {
                 $('#add_unit').is(":focus")) {
                 e.preventDefault();
                 $('button[name="add_button"]').trigger("click");
+                $("#add_name").focus();
             }
             return true;
         }
