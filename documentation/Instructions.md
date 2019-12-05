@@ -1,6 +1,6 @@
 ## Instructions for use
 
-As an unauthorized user, you may only search for and view recipes in the database. Navigate to `Sign up`, choose a name, unique username and password and create and account. Log in with your credentials to start using the application.
+As an unauthorized user, you may only search for and view recipes in the database. Navigate to `Sign up`, choose a name, unique username and password and create an account. Log in with your credentials to start using the application.
 
 Once logged in, your name is displayed on the right hand side of the navigation bar. Click on your name for the option to log out.
 

@@ -42,3 +42,7 @@ SELECT * FROM Recipe WHERE Recipe.account_id = [Account.id of current user];
 SELECT * FROM Ingredient WHERE Ingredient.account_id = [Account.id of current user];
 ```
 
+- User can search for recipes by tags.
+
+
+

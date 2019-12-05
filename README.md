@@ -12,7 +12,7 @@ Ingredients are user-specific and can only be viewed, edited and deleted by the 
 
 https://recipebase.herokuapp.com
 
-Navigate to "Sign up" to create a new user or sign in as test:test to access the features.
+Navigate to `Sign up` to create a new user or sign in as test:test to access the features.
 
 ---
 
