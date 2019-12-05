@@ -12,7 +12,7 @@ class RecipeIngredientForm(FlaskForm):
                           validators=[validators.Length(min=2)])
 
     amount = FloatField(widget=HiddenInput(),
-                          validators=[validators.NumberRange(min=1, max=100000)])
+                          validators=[validators.NumberRange(min=0.001, max=100000)])
 
     unit = StringField(widget=HiddenInput(),
                        validators=[validators.Length(max=10, message="Unit name is too long.")])
