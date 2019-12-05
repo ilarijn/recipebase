@@ -1,5 +1,5 @@
-### Local installation
----
+## Local installation
+
 For a local installation of the application, you must have Python 3 installed.
 
 Make sure you can run python and pip from the command line, download the contents of this repository and enter the following commands in the application's root directory.

@@ -1,5 +1,5 @@
-### Database diagram and table creation statements
----
+## Database diagram and table creation statements
+
 
 ![Database diagram](db_diagram.png)
 

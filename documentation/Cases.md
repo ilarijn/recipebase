@@ -1,5 +1,5 @@
-### Use cases and related queries
----
+## Use cases and related queries
+
 
 - User searches for recipes in the database by name, ingredient or ingredient category with search term `:term`. User gets search results sorted by number of matches in a single recipe where applicable.
 
