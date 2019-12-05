@@ -19,7 +19,7 @@
     <table style="margin-top: 30px;">
       {% for ingredient in ingredients %}
       <tr>
-        <td>{{ ingredient['amount'] }} {{ ingredient['unit'] }} {{ ingredient['name'] }}</td>
+        <td>{{ (ingredient['amount']|string).rstrip('0').rstrip('.') }} {{ ingredient['unit'] }} {{ ingredient['name'] }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -30,3 +30,4 @@
 </div>
 
 {% endblock %}
+

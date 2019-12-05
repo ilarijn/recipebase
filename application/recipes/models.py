@@ -5,12 +5,12 @@ from sqlalchemy.sql import text
 
 class RecipeIngredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey(
-        'recipe.id'))
-    ingredient_id = db.Column(db.Integer, db.ForeignKey(
-        'ingredient.id'))
+    recipe_id = db.Column(db.Integer,
+                          db.ForeignKey('recipe.id'))
+    ingredient_id = db.Column(db.Integer,
+                              db.ForeignKey('ingredient.id'))
 
-    amount = db.Column(db.Integer)
+    amount = db.Column(db.Float)
     unit = db.Column(db.String)
 
 
@@ -24,8 +24,8 @@ class Recipe(db.Model):
     servings = db.Column(db.Integer)
     ingredients = db.relationship("RecipeIngredient")
 
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
-                           nullable=False)
+    account_id = db.Column(db.Integer,
+                           db.ForeignKey('account.id'), nullable=False)
     account_name = db.Column(db.String)
 
     def __init__(self, name):

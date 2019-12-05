@@ -31,8 +31,7 @@ def ingredients_edit(ingredient_id):
                            ingredients=Ingredient.query.order_by(
                                func.lower(Ingredient.name)).all(),
                            form=form,
-                           form_action=url_for(
-                               "ingredients_save", ingredient_id=ingredient_id),
+                           form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                            button_text="Save changes",
                            account_id=current_user.id)
 
@@ -41,30 +40,32 @@ def ingredients_edit(ingredient_id):
 @login_required
 def ingredients_save(ingredient_id):
     ingredient = Ingredient.query.get(ingredient_id)
+
     if ingredient.account_id != current_user.id:
         abort(403)
+    
     form = IngredientForm(request.form, obj=ingredient)
+
     if not form.validate():
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(
-                                   func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
                                form=form,
-                               form_action=url_for(
-                                   "ingredients_save", ingredient_id=ingredient_id),
+                               form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                button_text="Save changes",
                                account_id=current_user.id)
+
     form.populate_obj(ingredient)
+
     try:
         db.session().commit()
         return redirect(url_for("ingredients_index"))
+
     except IntegrityError as error:
         db.session.rollback()
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(
-                                   func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
                                form=form,
-                               form_action=url_for(
-                                   "ingredients_save", ingredient_id=ingredient_id),
+                               form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                db_error="Ingredient name already exists.",
                                button_text="Save changes",
                                account_id=current_user.id)
@@ -74,6 +75,7 @@ def ingredients_save(ingredient_id):
 @login_required
 def ingredients_create():
     form = IngredientForm(request.form)
+
     if not form.validate():
         return render_template("ingredients/list.html",
                                ingredients=Ingredient.query.all(),
@@ -86,18 +88,18 @@ def ingredients_create():
                    unit=form.unit.data, account_id=current_user.id)
     kcal = form.kcal.data
     i.kcal = kcal
+
     try:
         db.session().add(i)
         db.session().commit()
         return redirect(url_for("ingredients_index"))
+
     except IntegrityError as error:
         db.session.rollback()
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(
-                                   func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
                                form=form,
-                               form_action=url_for(
-                                   "ingredients_create"),
+                               form_action=url_for("ingredients_create"),
                                db_error="Ingredient name already exists.",
                                button_text="Add",
                                account_id=current_user.id)
@@ -107,16 +109,17 @@ def ingredients_create():
 @login_required
 def ingredients_delete(ingredient_id):
     i = Ingredient.query.get(ingredient_id)
+
     if i.account_id != current_user.id:
         abort(403)
+
     r_i = RecipeIngredient.query.filter_by(ingredient_id=i.id).all()
+    
     if r_i:
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(
-                                   func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
                                form=IngredientForm(),
-                               form_action=url_for(
-                                   "ingredients_create"),
+                               form_action=url_for("ingredients_create"),
                                db_error="Ingredient is used in a recipe.",
                                button_text="Add",
                                account_id=current_user.id)

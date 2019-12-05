@@ -70,7 +70,7 @@ $(document).ready(function () {
                 $('#alert-add').append($.fn.yellowAlert('Ingredient name is too long.'));
                 return;
             }
-            if (Math.floor(amount) != amount || !($.isNumeric(amount)) || amount < 1 || amount > 1000000) {
+            if (!($.isNumeric(amount)) || amount <= 0 || amount > 1000000) {
                 $('#alert-add').append($.fn.yellowAlert('Amount is not a valid number.'));
                 return;
             }
@@ -85,7 +85,7 @@ $(document).ready(function () {
 
             //Add plaintext entry and hidden fields according to WTForms syntax requirements to ingredient list 
             var add = { id: $('#add_id').val(), name: name, amount: amount, unit: unit };
-            var entry = add['amount'] + ' ' + add['unit'] + ' ' + add['name'];
+            var entry = add['amount'].toString() + ' ' + add['unit'] + ' ' + add['name'];
             var element = '<li class="ingredient">' +
                 '<input type="hidden" id="id" name="ingredients-' + (ingredients_index) + '-ingredient_id" value="' + add['id'] + '">' +
                 '<input type="hidden" id="ri_name" name="ingredients-' + (ingredients_index) + '-ri_name" value="' + add['name'] + '">' +

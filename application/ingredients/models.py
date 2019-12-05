@@ -7,7 +7,7 @@ class Ingredient(db.Model):
     name = db.Column(db.String(144), unique=True, nullable=False)
     category = db.Column(db.String(100), nullable=True)
     unit = db.Column(db.String(20), nullable=True)
-    kcal = db.Column(db.Integer)
+    kcal = db.Column(db.Float)
 
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                            nullable=False)

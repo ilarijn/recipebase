@@ -12,28 +12,27 @@
           <th scope="col">Category</th>
           <th scope="col">Unit</th>
           <th scope="col">Kcal</th>
+          <th></th>
         </tr>
       </thead>
-      {% for ingredient in ingredients %}
-      <tr>
-        <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.name }}</td>
-        <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.category }}</td>
-        <td>{{ ingredient.unit }}</td>
-        <td>{{ ingredient.kcal }}</td>
-        {% if current_user.is_authenticated and ingredient.account_id == account_id %}
-        <td style="max-width: 2em;">
-          <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
-            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
-          </form>
-        </td>
-        <td style="max-width: 3em;">
-          <form method="GET" action="{{ url_for('ingredients_delete', ingredient_id=ingredient.id) }}">
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-          </form>
-        </td>
-        {% endif %}
-      </tr>
-      {% endfor %}
+      <tbody>
+        {% for ingredient in ingredients %}
+        <tr>
+          <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.name }}</td>
+          <td style="word-wrap: break-word; max-width: 8em;">{{ ingredient.category }}</td>
+          <td>{{ ingredient.unit }}</td>
+          <td>{{ (ingredient.kcal|string).rstrip('0').rstrip('.') }}</td>
+
+          {% if current_user.is_authenticated and ingredient.account_id == account_id %}
+          <td style="max-width: 3em;" align="center">
+            <form method="GET" action="{{ url_for('ingredients_edit', ingredient_id=ingredient.id) }}">
+              <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
   </div>
 
@@ -83,5 +82,21 @@
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#ingredientList').DataTable({
+      'columnDefs': [
+        {
+          'targets': [4, 4], /* column index */
+          'orderable': false 
+        }
+      ]
+    });
+
+  });
+</script>
 
 {% endblock %}
