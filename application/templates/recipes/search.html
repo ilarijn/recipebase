@@ -39,11 +39,11 @@
 
     {% include "recipes/all.html" %}
 
-    {% else %}
+    {% elif results is defined %}
 
     <div class="container">
         <div class="row row-card">
-            {% for id, contents in results.items() if results %}
+            {% for id, contents in results.items() %}
             <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
