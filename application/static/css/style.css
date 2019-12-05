@@ -139,33 +139,33 @@ li.ingredient {
 .col-ingredient-add,
 .col-ingredient-list
  {
-    overflow-y: auto; 
-    height: 80vh; 
-    width: 100%; 
-    scrollbar-width: thin;
+    overflow-y: auto !important; 
+    height: 80vh !important; 
+    width: 100% !important; 
+    scrollbar-width: thin !important;
    
 }
 
 .col-ingredient-add {
-    margin-left: 30px;
+    margin-left: 30px !important;
 }
 
 .form-ingredient {
-    border: solid 1px; 
-    border-radius: 0px; 
-    padding-bottom: 20px; 
-    margin-right: 0px;
-    margin-top: 0px; 
-    border-color: black;
+    border: solid 1px !important; 
+    border-radius: 0px !important; 
+    padding-bottom: 20px !important; 
+    margin-right: 0px !important;
+    margin-top: 0px !important; 
+    border-color: black !important;
 }
 
 .ingredient-input {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 
 .btn-ingredient {
-    margin-top: 20px; 
-    width: 100%;
+    margin-top: 20px !important; 
+    width: 100% !important;
 }
 
 
@@ -210,23 +210,19 @@ li.autocomplete :hover,
 
 /* DataTables */
 
-.dataTables_wrapper { 
-    font-size: default; 
-}
-
 .dataTables_info {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 
 #ingredientList_length {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 #ingredientList_filter {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 
 [class^="paginate"] {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 
 .paginate_button:hover {
@@ -237,8 +233,8 @@ li.autocomplete :hover,
     border: 0px solid var(--theme-color) !important;
     background-color: white !important; 
     color: white !important;
-    padding: 14px 28px;
-    font-size: 8px;
+    padding: 14px 28px !important;
+    font-size: 8px !important;
     cursor: pointer;
 }
 
