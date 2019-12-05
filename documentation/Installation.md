@@ -2,7 +2,7 @@
 
 For a local installation of the application, you must have Python 3 installed.
 
-Make sure you can run python and pip from the command line, download the contents of this repository and enter the following commands in the application's root directory.
+Make sure you can run `python3` and `pip` from the command line, download the contents of this repository and enter the following commands in the application's root directory.
 
 Install virtual environment:
 
@@ -12,7 +12,7 @@ Activate virtual environment::
 
 ```source venv/bin/activate```
 
-Download requirements:
+Install requirements:
 
 ```pip install -r requirements.txt```
 
@@ -22,10 +22,10 @@ Run the application:
 
 The application is now accessible by browser at http://localhost:5000/.
 
-
-
-### Deploying to Heroku
 ---
+
+## Deploying to Heroku
+
 Make sure the repository contains a Procfile with the following settings:
  
 ```web: gunicorn --preload --workers 1 application:app```
