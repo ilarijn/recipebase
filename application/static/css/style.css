@@ -95,6 +95,11 @@ main {
 
 .card {
      margin: 20px;
+     padding: 0px;
+ }
+
+ #sform label {
+     font-size: default;
  }
 
 
@@ -146,11 +151,12 @@ li.ingredient {
 }
 
 .form-ingredient {
-    border: dotted 2px; 
+    border: solid 1px; 
     border-radius: 0px; 
     padding-bottom: 20px; 
+    margin-right: 0px;
     margin-top: 0px; 
-    border-color: rgb(195, 194, 194);
+    border-color: black;
 }
 
 .ingredient-input {
@@ -201,3 +207,38 @@ li.autocomplete :hover,
 .ui-autocomplete {
     position: relative;
 }
+
+/* DataTables */
+
+.dataTables_wrapper { 
+    font-size: default; 
+}
+
+.dataTables_info {
+    font-size: 12px;
+}
+
+#ingredientList_length {
+    font-size: 12px;
+}
+#ingredientList_filter {
+    font-size: 14px;
+}
+
+[class^="paginate"] {
+    font-size: 12px;
+}
+
+.paginate_button:hover {
+    color: var(--theme-color) !important;
+}
+
+.paginate_button.current {
+    border: 0px solid var(--theme-color) !important;
+    background-color: white !important; 
+    color: white !important;
+    padding: 14px 28px;
+    font-size: 8px;
+    cursor: pointer;
+}
+

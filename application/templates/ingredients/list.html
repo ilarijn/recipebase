@@ -3,9 +3,9 @@
 {% block body %}
 
 
-<div class="row justify-content-around">
+<div class="row justify-content-between">
   <div class="col-7 col-ingredient-list">
-    <table class="table table-striped" id="ingredientList">
+    <table class="table compact table-striped" id="ingredientList">
       <thead>
         <tr>
           <th scope="col">Ingredient</th>
@@ -38,7 +38,7 @@
 
   <div class="col-4 col-ingredient-add">
     <h4>Add an ingredient</h4>
-    <div class="col col-lg-9 form-ingredient">
+    <div class="col col-lg-10 form-ingredient">
       <form method="POST" action="{{ form_action }}">
         <div class="form-label-group ingredient-input" style="margin-bottom: 10px;">
           {{ form.name.label }}
@@ -91,11 +91,11 @@
       'columnDefs': [
         {
           'targets': [4, 4], /* column index */
-          'orderable': false 
+          'orderable': false
         }
       ]
     });
-
+    $(".paginate_button.current").addClass("btn-primary");
   });
 </script>
 

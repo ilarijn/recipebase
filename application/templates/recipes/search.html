@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
 <div class="container">
     <div class="row justify-content-md-center">
         <p style="margin-bottom: 30px;">
@@ -33,6 +34,12 @@
             </form>
         </div>
     </div>
+
+    {% if recipes %}
+
+    {% include "recipes/all.html" %}
+
+    {% else %}
 
     <div class="container">
         <div class="row row-card">
@@ -75,6 +82,7 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 </div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='search.js') }}"></script>

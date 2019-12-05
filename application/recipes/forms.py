@@ -32,7 +32,7 @@ class RecipeForm(FlaskForm):
 
     instructions = StringField("Instructions", widget=TextArea(),
                                validators=[validators.Length(max=15000, message="Instructions are too long."),
-                                           validators.Regexp('^[\w ().,-\?\!:\n\r]+$', message="Instructions contain illegal characters.")])
+                                           validators.Regexp('^[\w ().,-\?\!:\n\r]+$|^$', message="Instructions contain illegal characters.")])
 
     ingredients = FieldList(FormField(RecipeIngredientForm))
 

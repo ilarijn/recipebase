@@ -51,7 +51,6 @@ $(document).ready(function () {
         };
     });
 
-
     //Append ingredient to list in form view
     var ingredients_index = $('#ingredients_size').val();
     console.log("ingredients_index: " + ingredients_index);
@@ -98,6 +97,20 @@ $(document).ready(function () {
             ingredients_index++;
             $.fn.clearReadOnly();
         })
+    });
+
+    //Add ingredient instead of form submit when focus is on related field
+    $('#recipe_form').on('keypress', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            if ($('#add_name').is(":focus") ||
+                $('#add_amount').is(":focus") ||
+                $('#add_unit').is(":focus")) {
+                e.preventDefault();
+                $('button[name="add_button"]').trigger("click");
+            }
+            return true;
+        }
     });
 
     //Delete ingredient from list in form view

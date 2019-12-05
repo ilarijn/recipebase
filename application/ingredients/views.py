@@ -12,8 +12,9 @@ from application.recipes.models import RecipeIngredient
 @login_required
 def ingredients_index():
     return render_template("ingredients/list.html",
-                           ingredients=Ingredient.query.order_by(
-                               func.lower(Ingredient.name)).all(),
+                           ingredients=Ingredient.query.
+                           filter_by(account_id=current_user.id).
+                           order_by(func.lower(Ingredient.name)).all(),
                            form=IngredientForm(),
                            form_action=url_for("ingredients_create"),
                            button_text="Add",
@@ -28,8 +29,9 @@ def ingredients_edit(ingredient_id):
         abort(403)
     form = IngredientForm(obj=ingredient)
     return render_template("ingredients/list.html",
-                           ingredients=Ingredient.query.order_by(
-                               func.lower(Ingredient.name)).all(),
+                           ingredients=Ingredient.query.
+                           filter_by(account_id=current_user.id).
+                           order_by(func.lower(Ingredient.name)).all(),
                            form=form,
                            form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                            button_text="Save changes",
@@ -48,7 +50,9 @@ def ingredients_save(ingredient_id):
 
     if not form.validate():
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.
+                               filter_by(account_id=current_user.id).
+                               order_by(func.lower(Ingredient.name)).all(),
                                form=form,
                                form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                button_text="Save changes",
@@ -63,7 +67,9 @@ def ingredients_save(ingredient_id):
     except IntegrityError as error:
         db.session.rollback()
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.
+                               filter_by(account_id=current_user.id).
+                               order_by(func.lower(Ingredient.name)).all(),
                                form=form,
                                form_action=url_for("ingredients_save", ingredient_id=ingredient_id),
                                db_error="Ingredient name already exists.",
@@ -78,7 +84,9 @@ def ingredients_create():
 
     if not form.validate():
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.all(),
+                               ingredients=Ingredient.query.
+                               filter_by(account_id=current_user.id).
+                               order_by(func.lower(Ingredient.name)).all(),                               
                                form=form,
                                form_action=url_for("ingredients_create"),
                                button_text="Add",
@@ -97,7 +105,9 @@ def ingredients_create():
     except IntegrityError as error:
         db.session.rollback()
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.
+                               filter_by(account_id=current_user.id).
+                               order_by(func.lower(Ingredient.name)).all(),
                                form=form,
                                form_action=url_for("ingredients_create"),
                                db_error="Ingredient name already exists.",
@@ -117,7 +127,9 @@ def ingredients_delete(ingredient_id):
     
     if r_i:
         return render_template("ingredients/list.html",
-                               ingredients=Ingredient.query.order_by(func.lower(Ingredient.name)).all(),
+                               ingredients=Ingredient.query.
+                               filter_by(account_id=current_user.id).
+                               order_by(func.lower(Ingredient.name)).all(),
                                form=IngredientForm(),
                                form_action=url_for("ingredients_create"),
                                db_error="Ingredient is used in a recipe.",
@@ -132,7 +144,7 @@ def ingredients_delete(ingredient_id):
 @app.route("/ingredients/list/", methods=["GET"])
 @login_required
 def ingredients_json():
-    ingredients = Ingredient.query.all()
+    ingredients = Ingredient.query.filter_by(account_id=current_user.id).all()
     json_list = []
     for i in ingredients:
         obj = {attr: value for attr, value in i.__dict__.items()

@@ -20,6 +20,10 @@ def recipes_index():
 
 @app.route("/recipes/search/", methods=["GET", "POST"])
 def recipes_search():
+    account_id = ""
+    if current_user.is_authenticated:
+            account_id = current_user.id
+
     if request.method == 'POST':
         results = Recipe.search_by_term(
             recipe=request.form.get("recipe"),
@@ -27,22 +31,20 @@ def recipes_search():
             category=request.form.get("category"),
             term=request.form.get("search"))
 
-        account_id = ""
-        if current_user.is_authenticated:
-            account_id = current_user.id
-
         return render_template("recipes/search.html",
                                results=results,
                                account_id=account_id)
 
     else:
-        return render_template("recipes/search.html", results={})
+        return render_template("recipes/search.html",
+                               recipes=Recipe.query.all(),
+                               account_id=account_id)
 
 
 @app.route("/recipes/new/", methods=["GET"])
 @login_required
 def recipes_form():
-    return render_template("recipes/recipeform.html",
+    return render_template("recipes/form.html",
                            form=RecipeForm(),
                            form_action=url_for("recipes_create"),
                            button_text="Create recipe")
@@ -54,7 +56,7 @@ def recipes_create():
     form = RecipeForm(request.form)
 
     if not form.validate():
-        return render_template("recipes/recipeform.html",
+        return render_template("recipes/form.html",
                                form=form,
                                form_action=url_for("recipes_create"),
                                button_text="Create recipe")
@@ -91,7 +93,7 @@ def recipes_edit(recipe_id):
         ingredient = Ingredient.query.get(ri_form.ingredient_id.data)
         ri_form.ri_name.data = ingredient.name
 
-    return render_template("recipes/recipeform.html",
+    return render_template("recipes/form.html",
                            form=form,
                            form_action=url_for(
                                "recipes_save", recipe_id=recipe.id),
@@ -104,7 +106,7 @@ def recipes_save(recipe_id):
     form = RecipeForm(request.form)
 
     if not form.validate():
-        return render_template("recipes/recipeform.html",
+        return render_template("recipes/form.html",
                                form=form,
                                form_action=url_for(
                                    "recipes_save", recipe_id=recipe_id),

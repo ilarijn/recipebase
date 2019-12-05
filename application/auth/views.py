@@ -10,14 +10,14 @@ from application.auth.forms import LoginForm, UserForm
 @app.route("/auth/login", methods=["GET", "POST"])
 def auth_login():
     if request.method == "GET":
-        return render_template("auth/loginform.html", form=LoginForm())
+        return render_template("auth/login.html", form=LoginForm())
 
     form = LoginForm(request.form)
     user = User.query.filter_by(
         username=form.username.data, password=form.password.data).first()
 
     if not user:
-        return render_template("auth/loginform.html", form=form,
+        return render_template("auth/login.html", form=form,
                                error="Incorrect username or password")
 
     login_user(user)
@@ -40,7 +40,7 @@ def auth_signup():
                         name=form.name.data, password=form.password.data)
             db.session.add(user)
             db.session.commit()
-            return render_template("auth/loginform.html", form=LoginForm(), success="Account created.")
+            return render_template("auth/login.html", form=LoginForm(), success="Account created.")
 
 
 @app.route("/auth/logout")
