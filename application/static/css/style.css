@@ -225,16 +225,22 @@ li.autocomplete :hover,
     font-size: 12px !important;
 }
 
-.paginate_button:hover {
+.paginate_button {
+
+    padding: 4px 8px !important;
+}
+
+.paginate_button {
     color: var(--theme-color) !important;
+    padding: 4px 8px !important;
 }
 
 .paginate_button.current {
-    border: 0px solid var(--theme-color) !important;
+    border: 1px solid var(--theme-color) !important;
     background-color: white !important; 
     color: white !important;
-    padding: 14px 28px !important;
-    font-size: 8px !important;
+    padding: 4px 8px !important;
+    font-size: 810x !important;
     cursor: pointer;
 }
 
