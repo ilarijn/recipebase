@@ -7,22 +7,11 @@ from application.recipes.models import Recipe, RecipeIngredient
 from application.recipes.forms import RecipeForm, RecipeIngredientForm
 
 
-@app.route("/recipes/", methods=["GET"])
-def recipes_index():
-    account_id = ""
-    if current_user.is_authenticated:
-        account_id = current_user.id
-
-    return render_template("recipes/list.html",
-                           recipes=Recipe.query.all(),
-                           account_id=account_id)
-
-
 @app.route("/recipes/search/", methods=["GET", "POST"])
 def recipes_search():
     account_id = ""
     if current_user.is_authenticated:
-            account_id = current_user.id
+        account_id = current_user.id
 
     if request.method == 'POST':
         results = Recipe.search_by_term(
@@ -39,6 +28,15 @@ def recipes_search():
         return render_template("recipes/search.html",
                                recipes=Recipe.query.all(),
                                account_id=account_id)
+
+
+@app.route("/recipes/", methods=["GET"])
+@login_required
+def recipes_index():
+    return render_template("recipes/list.html",
+                           recipes=Recipe.query.
+                           filter_by(account_id=current_user.id).all(),
+                           account_id=current_user.id)
 
 
 @app.route("/recipes/new/", methods=["GET"])
