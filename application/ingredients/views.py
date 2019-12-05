@@ -28,7 +28,9 @@ def ingredients_edit(ingredient_id):
     ingredient = Ingredient.query.get(ingredient_id)
     if ingredient.account_id != current_user.id:
         abort(403)
+    
     form = IngredientForm(obj=ingredient)
+
     return render_template("ingredients/list.html",
                            ingredients=Ingredient.query.
                            filter_by(account_id=current_user.id).
@@ -44,7 +46,6 @@ def ingredients_edit(ingredient_id):
 @login_required
 def ingredients_save(ingredient_id):
     ingredient = Ingredient.query.get(ingredient_id)
-
     if ingredient.account_id != current_user.id:
         abort(403)
     
@@ -125,7 +126,6 @@ def ingredients_create():
 @login_required
 def ingredients_delete(ingredient_id):
     i = Ingredient.query.get(ingredient_id)
-
     if i.account_id != current_user.id:
         abort(403)
 
@@ -158,19 +158,3 @@ def ingredients_json():
                if not str(attr).startswith("_")}
         json_list.append(obj)
     return json.dumps(json_list)
-
-
-@app.route("/ingredients/new/", methods=["POST"])
-@login_required
-def update_json():
-    ingredients = request.get_json()
-    for i in ingredients:
-        update = Ingredient.query.get(int(i['id']))
-        update.category = i['category']
-        update.unit = i['unit']
-        if str(i['kcal']).isnumeric():
-            update.kcal = int(i['kcal'])
-        else:
-            update.kcal = None
-    db.session.commit()
-    return redirect(url_for("recipes_index"))

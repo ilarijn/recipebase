@@ -47,13 +47,3 @@ def auth_signup():
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))
-
-
-@app.route("/auth/admin", methods=["GET"])
-@login_required
-def admin_view():
-    user = User.query.get(current_user.id)
-    if user.username == "admin":
-        return render_template("auth/admin.html", form=UserForm(), users=User.query.all())
-    else:
-        abort(403)

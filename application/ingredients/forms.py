@@ -16,7 +16,8 @@ class IngredientForm(FlaskForm):
                        [validators.Length(max=20, message="Unit name too long."),
                         validators.Optional()])
 
-    kcal = FloatField("Kcal per unit", validators=[validators.Optional()])
+    kcal = FloatField("Kcal per unit", validators=[validators.Length(max=10000000, message="Kcal value too large."),
+                                                   validators.Optional()])
 
     class Meta:
         csrf = False
