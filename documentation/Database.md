@@ -1,5 +1,7 @@
 ## Database diagram and table creation statements
 
+Notes:
+- Account.name is also stored under Recipe for convenience. When using the search and list functionalities, the additional storage requirement is likely justified by the improvement in performance resulting from not having to access the Account table just for the name.
 
 ![Database diagram](db_diagram.png)
 
