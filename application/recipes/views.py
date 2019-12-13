@@ -146,6 +146,7 @@ def recipes_view(recipe_id):
 
     kcal_total = ingredients.pop(-1)
     kcal_total /= r.servings
+    kcal_total = round(kcal_total)
     missing = ingredients.pop(-1)
 
     return render_template("recipes/view.html",
