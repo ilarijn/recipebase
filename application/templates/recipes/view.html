@@ -65,7 +65,7 @@
         let store = $(this).find("#amount_value");
 
         let newAmount = store.val() / previousServings * currentServings;
-        let newText = newAmount.toString() + ' ' + $(this).find("#unit_value").val() + ' ' + $(this).find("#name_value").val();
+        let newText = newAmount.toFixed(2).replace(/\.0+$/, "").toString() + ' ' + $(this).find("#unit_value").val() + ' ' + $(this).find("#name_value").val();
 
         $(this).find("#ingredient_text").text(newText);
 
