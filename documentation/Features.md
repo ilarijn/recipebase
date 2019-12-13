@@ -9,3 +9,6 @@ Originally the idea behind ingredient categories was to also provide a way to as
 
 #### Unit conversions
 Adding automatic unit conversions for the most common cases would make calculating serving kcal values easier. Currently the application expects that the user uses an ingredient's default unit (as listed in the db table Ingredient) in a recipe in order for this ingredient to be included in calculating a kcal value per serving. Adding conversions for cases such as tbsp=15ml, kg=1000g, cup=250ml would make this feature much more flexible. 
+
+#### Ingredient name parsing
+When adding new ingredients to the database after recipe creation, the application currently checks for existing ingredients based on name. The names are compared in lowercase with any extra whitespace removed, but e.g. singular and plural forms of a nouns are two different names, which results in unnecessary database entries simply because a user wants to write '1 onion' instead of '1 onions'. This is especially true for Finnish language entries where different cases of a noun produce even more extra entries simply due to language conventions. Not the easiest problem to start solving, but an interesting one.
