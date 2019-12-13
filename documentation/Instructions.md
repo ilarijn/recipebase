@@ -21,10 +21,15 @@ To search, enter a search term in the text field and select whether you want to 
 
 Clicking on a recipe name in the listing will show the recipe on a new page. You may change the amount of servings by changing the value in the servings field and ingredient amounts will be adjusted accordingly.
 
+The total calorie value of a recipe is displayed below the servings field and will be adjusted according to amount of servings. If any ingredient used in the recipe is missing a kcal value, there will be a disclaimer below the calorie value. 
+
+Kcal values are counted only for those ingredients that use their default units in the recipe. In other words: for an ingredient's kcal value to be used in a recipe, its unit must be the same in the recipe as the value listed as its default unit in the database, viewable and editable in the listing of ingredients accessed by `Ingredients` in the navigation bar.  
+
 `My recipes` in the `Recipes` dropdown menu will list all recipes created by you.
 
 #### Editing a recipe
 Clicking `Edit` either from the recipe or search result view will open up the recipe on the same page that is used for creating a recipe, and editing it works the same way as during creation.
 
 #### Ingredients
-Selecting `Ingredients` from the top navigation bar will bring up a table listing of all ingredients existing in the database for your account. On the right hand side form, you may enter the details of a new ingredient and add it to the database. Clicking on the `Edit` button of an ingredient in the table view will bring up the details of an ingredient for editing. 
+Selecting `Ingredients` from the top navigation bar will bring up a table listing of all ingredients existing in the database for your account. On the right hand side form, you may enter the details (name, default unit, category, kcal value per default unit) of a new ingredient and add it to the database. Clicking on the `Edit` button of an ingredient in the table view will bring up the details of an ingredient for editing. 
+Clicking `Delete` will simply delete the ingredient.    

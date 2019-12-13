@@ -18,6 +18,13 @@
     <p>Servings:
       <input type="number" min="1" , value="{{ recipe.servings }}" style="max-width: 4em;" id="servings_counter">
     </p>
+    <small class="text-muted">
+      <input type="hidden" id="kcal_store">
+      <p id="calories">
+      </p>
+      <p id="missing">
+      </p>
+    </small>
     <table style="margin-top: 30px;">
       {% for ingredient in ingredients %}
       <tr class="ingredient_row">
@@ -25,6 +32,7 @@
           <input type="hidden" id="amount_value" value="{{ ingredient['amount'] }}">
           <input type="hidden" id="unit_value" value="{{ ingredient['unit'] }}">
           <input type="hidden" id="name_value" value="{{ ingredient['name'] }}">
+          <input type="hidden" id="kcal_value" value="{{ ingredient['kcal_value'] }}">
         </td>
         <td id="ingredient_text">{{ (ingredient['amount']|string).rstrip('0').rstrip('.') }} {{ ingredient['unit'] }}
           {{ ingredient['name'] }}</td>
@@ -41,6 +49,31 @@
 
   $(document).ready(function () {
 
+    var total_kcal = 0.0;
+    var missing = []
+
+    $('.ingredient_row').each(function () {
+      let kcal = parseFloat($(this).find("#kcal_value").val());
+      total_kcal += kcal;
+      if (kcal <= 0 || kcal == null || typeof kcal === undefined) {
+        missing.push($(this).find("#name_value").val());
+      }
+    });
+
+    if (missing.length > 0) {
+      var missing_text = "(calorie data missing for: ";
+      for (i = 0; i < missing.length; i++) {
+        missing_text += missing[i];
+        if (i < missing.length - 1) {
+          missing_text += ", ";
+        }
+      }
+      $(this).find("#missing").text(missing_text+")");
+    }
+
+    $("#calories").text("Total calories: " + total_kcal + " kcal");
+    $("#kcal_store").val(total_kcal);
+
     var counter = $("#servings_counter");
     var previousServings = counter.val();
 
@@ -54,8 +87,13 @@
         let newText = newAmount.toString() + ' ' + $(this).find("#unit_value").val() + ' ' + $(this).find("#name_value").val();
 
         $(this).find("#ingredient_text").text(newText);
+
         store.val(newAmount);
       });
+      total_kcal = $("#kcal_store").val();
+      total_kcal = total_kcal / previousServings * currentServings;
+      $("#calories").text("Total calories: " + total_kcal + " kcal");
+      $("#kcal_store").val(total_kcal);
       previousServings = currentServings;
 
     });

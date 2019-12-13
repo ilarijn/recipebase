@@ -204,6 +204,11 @@ def link_amounts(r_i):
     ingredients = []
     for item in r_i:
         i = Ingredient.query.get(item.ingredient_id)
+        kcal_value = 0.0
+        if item.unit == i.unit and i.kcal != None:
+            kcal_value = item.amount * i.kcal
+
         ingredients.append({'id': i.id, 'name': i.name,
-                            'amount': item.amount, 'unit': item.unit, 'kcal': i.kcal})
+                            'amount': item.amount, 'unit': item.unit, 
+                            'kcal': i.kcal, 'kcal_value': kcal_value})
     return ingredients

@@ -2,10 +2,10 @@
 
 
 
-#### Recipes
+### Recipes
 
 ---
-User (with Account.id 1) creates a recipe (with Recipe.id 3).
+**User (with Account.id 1) creates a recipe (with Recipe.id 3).**
 
 - Insert new recipe into table Recipe.
 ```sql
@@ -26,7 +26,7 @@ INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, amount, unit) VALUES (3
 ```
 ---
 
-User edits a recipe.
+**User edits a recipe.**
 
 - Update name, instructions and servings.
 
@@ -44,7 +44,7 @@ DELETE FROM Recipe_Ingredient WHERE recipe_ingredient.id = 2;
 
 ---
 
-User deletes a recipe (with Recipe.id 2).
+**User deletes a recipe (with Recipe.id 2).**
 
 - First delete each related ingredient from table RecipeIngredient, then delete row from Recipe.
 
@@ -58,7 +58,7 @@ DELETE FROM Recipe WHERE recipe.id = 2;
 
 ---
 
-User searches for recipes in the database by name, ingredient or ingredient category with search term `:term`. User gets search results sorted by number of matches in a single recipe where applicable.
+**User searches for recipes in the database by name, ingredient or ingredient category with search term `:term`. User gets search results sorted by number of matches in a single recipe where applicable.**
 
 ```sql
 SELECT Recipe.id, Recipe.name, Recipe.account_id, Recipe.account_name FROM Recipe 
@@ -94,7 +94,7 @@ WHERE (LOWER(Ingredient.category) LIKE LOWER(:term)) ORDER BY matches.count DESC
 ```
 ---
 
-User lists recipes they have created themselves.
+**User lists recipes they have created themselves.**
 
 ```sql
 SELECT * FROM Recipe WHERE Recipe.account_id = 1;
@@ -102,7 +102,7 @@ SELECT * FROM Recipe WHERE Recipe.account_id = 1;
 
 ---
 
-User views a recipe.
+**User views a recipe.**
 
 - First, query table Recipe with related Recipe.id.
 
@@ -125,10 +125,10 @@ WHERE ingredient.id = 4;
 ```
 ---
 
-#### Ingredients
+### Ingredients
 
 ---
-User manually adds an ingredient to the database.
+**User manually adds an ingredient to the database.**
 
 ```sql
 INSERT INTO Ingredient (name, category, unit, kcal, account_id) 
@@ -136,31 +136,31 @@ VALUES ('Strawberry', 'fruit', 'g', 0.3, 1);
 ```
 ---
 
-User edits an ingredient.
+**User edits an ingredient.**
 ```sql
 UPDATE Ingredient SET category='berry', unit='kg', kcal=300 WHERE ingredient.id = 4;
 ```
 ---
-User deletes an ingredient.
+**User deletes an ingredient.**
 ```sql
 DELETE FROM Ingredient WHERE ingredient.id = 4;
 ```
 ---
-User browses ingredients and only ingredients created by current user are displayed.
+**User browses ingredients and only ingredients created by current user are displayed.**
 
 ```sql
 SELECT * FROM Ingredient WHERE Ingredient.account_id = 1;
 ```
 ---
-#### Authorization
+### Authorization
 ---
-User signs up for an account.
+**User signs up for an account.**
 ```sql
 INSERT INTO Account (date_created, date_modified, name, username, password) 
 VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'new user', 'newuser', 'asdf1234');
 ```
 ---
-User logs in.
+**User logs in.**
 ```sql
 SELECT account.id AS account_id, account.date_created AS account_date_created, 
 account.date_modified AS account_date_modified, account.name AS account_name, 
@@ -168,7 +168,7 @@ account.username AS account_username, account.password AS account_password
 FROM Account WHERE account.username = 'newuser' AND account.password = 'asdf1234';
 ```
 ---
-User (with Account.username 'newuser') is deleted from database.
+**User (with Account.username 'newuser') is deleted from database.**
 ```sql
 DELETE FROM Account WHERE account.username = 'newuser';
 ```
