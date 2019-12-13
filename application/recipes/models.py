@@ -20,7 +20,6 @@ class Recipe(db.Model):
 
     name = db.Column(db.String(144), nullable=False)
     instructions = db.Column(db.Text, nullable=True)
-    time = db.Column(db.Integer)
     servings = db.Column(db.Integer)
     ingredients = db.relationship("RecipeIngredient")
 

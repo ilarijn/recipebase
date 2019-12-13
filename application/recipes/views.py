@@ -144,9 +144,15 @@ def recipes_view(recipe_id):
     if current_user.is_authenticated:
         account_id = current_user.id
 
+    kcal_total = ingredients.pop(-1)
+    kcal_total /= r.servings
+    missing = ingredients.pop(-1)
+
     return render_template("recipes/view.html",
                            recipe=r,
                            ingredients=ingredients,
+                           missing=missing,
+                           kcal_total=kcal_total,
                            account_id=account_id)
 
 
@@ -202,13 +208,16 @@ def create_ingredients(ingredients, recipe_id):
 
 def link_amounts(r_i):
     ingredients = []
+    missing = []
+    kcal_total = 0.0
     for item in r_i:
         i = Ingredient.query.get(item.ingredient_id)
-        kcal_value = 0.0
         if item.unit == i.unit and i.kcal != None:
-            kcal_value = item.amount * i.kcal
-
+            kcal_total += item.amount * i.kcal
+        else:
+            missing.append(i.name)
         ingredients.append({'id': i.id, 'name': i.name,
-                            'amount': item.amount, 'unit': item.unit, 
-                            'kcal': i.kcal, 'kcal_value': kcal_value})
+                            'amount': item.amount, 'unit': item.unit})
+    ingredients.append(missing)
+    ingredients.append(kcal_total)
     return ingredients
