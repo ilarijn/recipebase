@@ -24,7 +24,7 @@ To search, enter a search term in the text field and select whether you want to 
 #### Viewing a recipe
 Clicking on a recipe name in a listing will show the recipe on a new page. You may change the amount of servings by changing the value in the servings field and ingredient amounts will be adjusted accordingly.
 
-The total calorie value of a recipe is displayed below the servings field and will be adjusted according to amount of servings. If any ingredient used in the recipe is missing a kcal value, there will be a disclaimer below the calorie value. 
+A calorie value per serving is displayed below the servings field. If any ingredient used in the recipe is missing a kcal value, there will be a disclaimer below the text. 
 
 Kcal values are counted only for those ingredients that use their default units in the recipe. In other words: for an ingredient's kcal value to be used in a recipe, its unit must be the same in the recipe as the value listed as its default unit in the database, viewable and editable in the listing of ingredients accessed by `Ingredients` in the navigation bar.  
 

@@ -38,7 +38,6 @@ CREATE TABLE recipe (
 	date_created DATETIME, 
 	name VARCHAR(144) NOT NULL, 
 	instructions TEXT, 
-	time INTEGER, 
 	servings INTEGER, 
 	account_id INTEGER NOT NULL, 
 	account_name VARCHAR, 

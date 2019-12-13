@@ -1,5 +1,5 @@
 from application import app, db
-from flask import render_template, request, redirect, url_for, json, jsonify, abort
+from flask import render_template, request, redirect, url_for, json, abort
 from flask_login import login_required, current_user
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -148,6 +148,7 @@ def ingredients_delete(ingredient_id):
         return redirect(url_for("ingredients_index"))
 
 
+# Create a JSON array of current user's ingredients for autocomplete function in static/recipes.js
 @app.route("/ingredients/list/", methods=["GET"])
 @login_required
 def ingredients_json():

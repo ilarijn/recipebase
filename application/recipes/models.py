@@ -56,6 +56,8 @@ class Recipe(db.Model):
 
         response = {}
 
+        # Execute queries and create response based on search parameters.
+        # The below logic attempts to order search results by amount of matches.
         if ingredient:
             stmt = text(i_query).params(term=term)
             res = db.engine.execute(stmt)

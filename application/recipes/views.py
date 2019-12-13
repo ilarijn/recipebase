@@ -174,6 +174,8 @@ def recipes_delete(recipe_id):
     return redirect(url_for("recipes_index"))
 
 
+# Create RecipeIngredients from a list and add new Ingredients
+# if ingredient name is not found in the database (not case-sensitive).
 def create_ingredients(ingredients, recipe_id):
     new_ingredients = []
 
@@ -190,7 +192,9 @@ def create_ingredients(ingredients, recipe_id):
 
             else:
                 new = Ingredient(
-                    name=i['ri_name'].strip(), unit=i['unit'], account_id=current_user.id)
+                    name=i['ri_name'].strip(),
+                    unit=i['unit'],
+                    account_id=current_user.id)
                 db.session().add(new)
                 db.session().flush()
                 ingredient_id = new.id
@@ -200,12 +204,17 @@ def create_ingredients(ingredients, recipe_id):
             ingredient_id = i['ingredient_id']
 
         ri = RecipeIngredient(
-            recipe_id=recipe_id, ingredient_id=ingredient_id, amount=i['amount'], unit=i['unit'])
+            recipe_id=recipe_id,
+            ingredient_id=ingredient_id,
+            amount=i['amount'],
+            unit=i['unit'])
         db.session().add(ri)
 
     return new_ingredients
 
 
+# Create a printable list of ingredients for Jinja.
+# Calculate a kcal total for ingredients using default unit.
 def link_amounts(r_i):
     ingredients = []
     missing = []

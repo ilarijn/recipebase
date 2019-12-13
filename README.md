@@ -25,3 +25,5 @@ Navigate to `Sign up` to create a new user or sign in as test:test to access the
 [Database](/documentation/Database.md)
 
 [Use cases](/documentation/Cases.md)
+
+[Future features](/documentation/Features.md)
