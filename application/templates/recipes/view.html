@@ -13,7 +13,7 @@
     </small>
     {% endif %}
     <p>
-      <font size="2">{{ recipe.date_created }}</font>
+      <font size="2">{{ recipe.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</font>
     </p>
     <p>Servings:
       <input type="number" min="1" , value="{{ recipe.servings }}" style="max-width: 4em;" id="servings_counter">

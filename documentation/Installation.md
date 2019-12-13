@@ -47,7 +47,7 @@ heroku create [project_name]
 ```
 
 ```
-git remote add heroku https://git.heroku.com/[repository_name].git
+git remote add heroku https://git.heroku.com/[project_name].git
 ```
 
 ```

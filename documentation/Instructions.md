@@ -19,13 +19,16 @@ Click on the `recipebase` text in the navigation bar or go to the site's home ad
 
 To search, enter a search term in the text field and select whether you want to match recipe names, ingredient names or ingredient categories. Clicking on `Search` will bring up the search results below along with information regarding which items were matched in each recipe by the search term. If a recipe in the listing was created by you, there will also be links to `Edit` or `Delete` the recipe. 
 
-Clicking on a recipe name in the listing will show the recipe on a new page. You may change the amount of servings by changing the value in the servings field and ingredient amounts will be adjusted accordingly.
+`My recipes` in the `Recipes` dropdown menu will list all recipes created by you.
+
+#### Viewing a recipe
+Clicking on a recipe name in a listing will show the recipe on a new page. You may change the amount of servings by changing the value in the servings field and ingredient amounts will be adjusted accordingly.
 
 The total calorie value of a recipe is displayed below the servings field and will be adjusted according to amount of servings. If any ingredient used in the recipe is missing a kcal value, there will be a disclaimer below the calorie value. 
 
 Kcal values are counted only for those ingredients that use their default units in the recipe. In other words: for an ingredient's kcal value to be used in a recipe, its unit must be the same in the recipe as the value listed as its default unit in the database, viewable and editable in the listing of ingredients accessed by `Ingredients` in the navigation bar.  
 
-`My recipes` in the `Recipes` dropdown menu will list all recipes created by you.
+If this recipe was created by you, there will also be links to `Edit` or `Delete` the recipe below the title. 
 
 #### Editing a recipe
 Clicking `Edit` either from the recipe or search result view will open up the recipe on the same page that is used for creating a recipe, and editing it works the same way as during creation.
